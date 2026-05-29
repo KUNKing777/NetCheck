@@ -4,22 +4,22 @@
 // ============================================================
 
 const SERVICES = [
-    { name: 'Google',       color: '#4285f4', url: 'https://www.google.com/favicon.ico',        favicon: 'https://www.google.com/favicon.ico' },
-    { name: 'ChatGPT',      color: '#10a37f', url: 'https://chatgpt.com/',                       favicon: 'https://chatgpt.com/favicon.ico' },
-    { name: 'OpenAI API',   color: '#412991', url: 'https://platform.openai.com/',               favicon: 'https://openai.com/favicon.ico' },
-    { name: 'Claude',       color: '#d97706', url: 'https://www.anthropic.com/',                 favicon: 'https://www.anthropic.com/favicon.ico' },
-    { name: 'GitHub',       color: '#6e40c9', url: 'https://github.com/favicon.ico',            favicon: 'https://github.com/favicon.ico' },
-    { name: 'YouTube',      color: '#ff0000', url: 'https://www.youtube.com/favicon.ico',       favicon: 'https://www.youtube.com/favicon.ico' },
-    { name: 'Twitter/X',    color: '#000',    url: 'https://x.com/favicon.ico',                  favicon: 'https://x.com/favicon.ico' },
-    { name: 'Wikipedia',    color: '#636466', url: 'https://www.wikipedia.org/',                 favicon: 'https://www.wikipedia.org/favicon.ico' },
-    { name: 'Cloudflare',   color: '#f38020', url: 'https://www.cloudflare.com/favicon.ico',    favicon: 'https://www.cloudflare.com/favicon.ico' },
-    { name: 'Baidu',        color: '#2932e1', url: 'https://www.baidu.com/favicon.ico',         favicon: 'https://www.baidu.com/favicon.ico' },
-    { name: 'Bilibili',     color: '#fb7299', url: 'https://www.bilibili.com/favicon.ico',      favicon: 'https://www.bilibili.com/favicon.ico' },
-    { name: 'Zhihu',        color: '#0066ff', url: 'https://www.zhihu.com/favicon.ico',         favicon: 'https://www.zhihu.com/favicon.ico' },
-    { name: 'Weibo',        color: '#e6162d', url: 'https://www.weibo.com/favicon.ico',         favicon: 'https://www.weibo.com/favicon.ico' },
-    { name: 'Douyin',       color: '#000',    url: 'https://www.douyin.com/favicon.ico',        favicon: 'https://www.douyin.com/favicon.ico' },
-    { name: 'Tencent',      color: '#12b7f5', url: 'https://www.tencent.com/favicon.ico',       favicon: 'https://www.tencent.com/favicon.ico' },
-    { name: 'DeepSeek',     color: '#4d6bfe', url: 'https://www.deepseek.com/favicon.ico',      favicon: 'https://www.deepseek.com/favicon.ico' },
+    { name: 'Google',       color: '#4285f4', favicon: 'https://www.google.com/favicon.ico' },
+    { name: 'ChatGPT',      color: '#10a37f', favicon: 'https://chatgpt.com/favicon.ico' },
+    { name: 'OpenAI API',   color: '#412991', favicon: 'https://openai.com/favicon.ico' },
+    { name: 'Claude',       color: '#d97706', favicon: 'https://www.anthropic.com/favicon.ico' },
+    { name: 'GitHub',       color: '#6e40c9', favicon: 'https://github.com/favicon.ico' },
+    { name: 'YouTube',      color: '#ff0000', favicon: 'https://www.youtube.com/favicon.ico' },
+    { name: 'Twitter/X',    color: '#000',    favicon: 'https://x.com/favicon.ico' },
+    { name: 'Wikipedia',    color: '#636466', favicon: 'https://www.wikipedia.org/favicon.ico' },
+    { name: 'Cloudflare',   color: '#f38020', favicon: 'https://www.cloudflare.com/favicon.ico' },
+    { name: 'Baidu',        color: '#2932e1', favicon: 'https://www.baidu.com/favicon.ico' },
+    { name: 'Bilibili',     color: '#fb7299', favicon: 'https://www.bilibili.com/favicon.ico' },
+    { name: 'Zhihu',        color: '#0066ff', favicon: 'https://www.zhihu.com/favicon.ico' },
+    { name: 'Weibo',        color: '#e6162d', favicon: 'https://www.weibo.com/favicon.ico' },
+    { name: 'Douyin',       color: '#000',    favicon: 'https://www.douyin.com/favicon.ico' },
+    { name: 'Tencent',      color: '#12b7f5', favicon: 'https://www.tencent.com/favicon.ico' },
+    { name: 'DeepSeek',     color: '#4d6bfe', favicon: 'https://www.deepseek.com/favicon.ico' },
 ];
 
 const DNS_TARGETS = [
@@ -51,7 +51,7 @@ const i18n = {
         feat_env: '网络环境', feat_env_desc: '连接类型、下行速度、RTT、省流模式',
         feat_latency: '延迟测试', feat_latency_desc: 'Ping 16 个服务：Google、ChatGPT、GitHub 等',
         feat_conn: '连通性', feat_conn_desc: '检测全球服务的可访问性',
-        feat_dns: 'DNS 解析', feat_dns_desc: '通过 Google DNS 解析域名，测量速度',
+        feat_dns: 'DNS 解析', feat_dns_desc: '通过 DoH 解析域名（DNSPod/阿里/Google），测量速度',
         feat_webrtc: 'WebRTC 泄露', feat_webrtc_desc: '检测 WebRTC 协议导致的真实 IP 泄露',
         feat_dnsleak: 'DNS 泄露', feat_dnsleak_desc: '检查 DNS 查询是否在 VPN 外暴露',
         feat_fp: '浏览器指纹', feat_fp_desc: '浏览器与设备指纹分析',
@@ -70,7 +70,7 @@ const i18n = {
         footer: 'NetCheck — 纯静态网络诊断工具 · 数据不会上传至任何服务器',
         leak_no_leak: '无泄露', leak_leaked: '已泄露',
         leak_safe_result: '安全', leak_warn_result: '注意',
-        summary_connectivity: '连通性', summary_reachable: '个服务可达',
+        summary_connectivity: '连通性', summary_reachable: '个服务可连接', summary_smooth: '流畅',
         summary_dns_title: 'DNS', summary_resolved: '个域名解析成功',
         summary_webrtc_title: 'WebRTC', summary_webrtc_no_leak: '未检测到泄露',
         summary_webrtc_leaked: 'IP 可能已泄露',
@@ -105,6 +105,7 @@ const i18n = {
         ip_hosting: '机房IP', ip_proxy: '代理/VPN', ip_mobile: '移动网络', ip_residential: '住宅IP',
         toast_ip_change: 'IP 地址已发生变化',
         report_copied: '已复制到剪贴板',
+        dark_toggle: '切换深色模式',
     },
     en: {
         nav_ip: 'IP Info', nav_latency: 'Latency', nav_dns: 'DNS', nav_security: 'Security',
@@ -115,7 +116,7 @@ const i18n = {
         feat_env: 'Network Env', feat_env_desc: 'Connection type, downlink, RTT, data saver',
         feat_latency: 'Latency Test', feat_latency_desc: 'Ping 16 services: Google, ChatGPT, GitHub, etc.',
         feat_conn: 'Connectivity', feat_conn_desc: 'Check accessibility of global services',
-        feat_dns: 'DNS Resolution', feat_dns_desc: 'Resolve domains via Google DNS, measure speed',
+        feat_dns: 'DNS Resolution', feat_dns_desc: 'Resolve domains via DoH (DNSPod/AliDNS/Google), measure speed',
         feat_webrtc: 'WebRTC Leak', feat_webrtc_desc: 'Detect real IP leaking via WebRTC protocol',
         feat_dnsleak: 'DNS Leak', feat_dnsleak_desc: 'Check if DNS queries are exposed outside VPN',
         feat_fp: 'Fingerprint', feat_fp_desc: 'Browser & device fingerprint analysis',
@@ -134,7 +135,7 @@ const i18n = {
         footer: 'NetCheck — Pure static network diagnostics tool · No data uploaded to any server',
         leak_no_leak: 'No Leak', leak_leaked: 'Leaked',
         leak_safe_result: 'Safe', leak_warn_result: 'Warning',
-        summary_connectivity: 'Connectivity', summary_reachable: ' services reachable',
+        summary_connectivity: 'Connectivity', summary_reachable: ' connectable', summary_smooth: 'smooth',
         summary_dns_title: 'DNS', summary_resolved: ' domains resolved',
         summary_webrtc_title: 'WebRTC', summary_webrtc_no_leak: 'No leak detected',
         summary_webrtc_leaked: 'IP may be leaked',
@@ -170,6 +171,7 @@ const i18n = {
         ip_hosting: 'Datacenter', ip_proxy: 'Proxy/VPN', ip_mobile: 'Mobile', ip_residential: 'Residential',
         toast_ip_change: 'IP address has changed',
         report_copied: 'Copied to clipboard',
+        dark_toggle: 'Toggle dark mode',
     }
 };
 
@@ -182,6 +184,11 @@ function applyLang() {
         const key = el.getAttribute('data-i18n');
         const text = t(key);
         if (text) el.textContent = text;
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        const text = t(key);
+        if (text) el.setAttribute('title', text);
     });
     document.getElementById('btnLang').textContent = currentLang === 'zh' ? 'EN' : '中';
     document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
@@ -438,12 +445,39 @@ async function checkIPv6() {
 // Latency & Connectivity
 // ============================================================
 
-async function ping(url, timeout = 8000) {
-    const start = performance.now();
-    try {
+// Measure latency to a URL via an HTTP round-trip (not an ICMP ping).
+// With mode:'no-cors' the response is opaque, so we time the full fetch:
+// DNS + TCP + TLS + request/response. The first request pays the
+// connection-setup cost, which inflates and adds jitter, so we: (1) do one
+// warm-up request to establish the connection (result discarded), then
+// (2) take several samples and return the minimum. Values are only
+// meaningful for relative comparison, not as absolute network RTT.
+async function ping(url, { timeout = 8000, samples = 3 } = {}) {
+    const once = async () => {
+        const start = performance.now();
         await fetch(url, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(timeout) });
-        return Math.round(performance.now() - start);
-    } catch { return -1; }
+        return performance.now() - start;
+    };
+
+    try {
+        // Warm-up (establishes connection; result discarded). Its timing still
+        // confirms reachability before we start sampling.
+        await once();
+    } catch {
+        return -1;
+    }
+
+    let best = Infinity;
+    for (let i = 0; i < samples; i++) {
+        try {
+            const ms = await once();
+            if (ms < best) best = ms;
+        } catch {
+            // A later sample failing after a successful warm-up is treated as
+            // transient; keep any best value we already have.
+        }
+    }
+    return best === Infinity ? -1 : Math.round(best);
 }
 
 async function asyncPool(limit, items, fn) {
@@ -477,6 +511,7 @@ async function runLatency() {
     });
 
     let ok = 0;
+    let smooth = 0;
     await asyncPool(6, SERVICES, async (s) => {
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         const el = document.getElementById(`lat-${id}`);
@@ -485,7 +520,10 @@ async function runLatency() {
         const bar = el.querySelector('.lat-bar');
         const st = el.querySelector('.lat-status');
 
-        const ms = await ping(s.url);
+        // Ping the favicon for every service so all targets are the same
+        // lightweight resource type. Using the homepage URL for some services
+        // would unfairly inflate their latency vs. favicon-only services.
+        const ms = await ping(s.favicon);
         if (ms === -1) {
             val.textContent = t('latency_timeout');
             val.className = 'lat-value timeout';
@@ -500,11 +538,12 @@ async function runLatency() {
             else { val.className = 'lat-value slow'; bar.className = 'lat-bar slow'; }
             st.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
             ok++;
+            if (ms < 1000) smooth++;
         }
     });
 
     setBadge('latBadge', 'done', `${ok}/${SERVICES.length}`);
-    return { ok, total: SERVICES.length };
+    return { ok, smooth, total: SERVICES.length };
 }
 
 // ============================================================
@@ -581,6 +620,18 @@ async function runDNS() {
 async function checkWebRTC() {
     return new Promise(resolve => {
         const rawIPs = new Set();
+
+        // Strict validators to avoid capturing non-IP tokens from the
+        // candidate string (foundation, priority, mDNS hostnames, etc.).
+        const isValidIPv4 = ip => {
+            const m = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+            return !!m && m.slice(1).every(o => +o <= 255);
+        };
+        const isValidIPv6 = ip => ip.includes(':') && /^[0-9a-f:]+$/i.test(ip) && (ip.match(/:/g) || []).length >= 2;
+        const isPrivateV4 = ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.)/.test(ip);
+        // ULA (fc00::/7), link-local (fe80::/10) and loopback are not public.
+        const isPrivateV6 = ip => /^(fc|fd|fe8|fe9|fea|feb)/i.test(ip) || ip === '::1';
+
         try {
             const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
             pc.createDataChannel('');
@@ -588,25 +639,28 @@ async function checkWebRTC() {
             pc.onicecandidate = e => {
                 if (!e.candidate) {
                     pc.close();
-                    // Filter valid IPs, exclude 0.0.0.0 and localhost
+                    // Keep only syntactically valid, non-loopback addresses.
                     const valid = [...rawIPs].filter(ip =>
-                        ip !== '0.0.0.0' && ip !== '127.0.0.1' && !ip.startsWith('127.')
+                        (isValidIPv4(ip) && ip !== '0.0.0.0' && !ip.startsWith('127.')) ||
+                        (isValidIPv6(ip) && ip !== '::')
                     );
-                    // Separate private vs public
-                    const isPrivate = ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.)/.test(ip);
-                    const privateIPs = valid.filter(isPrivate);
-                    const publicIPs = valid.filter(ip => !isPrivate(ip) && !ip.includes(':'));
+                    const privateIPs = valid.filter(ip => isValidIPv4(ip) ? isPrivateV4(ip) : isPrivateV6(ip));
+                    const publicIPs = valid.filter(ip => isValidIPv4(ip) ? !isPrivateV4(ip) : !isPrivateV6(ip));
 
-                    // Get HTTP-detected IP for comparison
-                    const httpIP = document.getElementById('dIP')?.textContent || '';
+                    // Compare against the HTTP-detected public IP.
+                    const httpIP = document.getElementById('dIP')?.textContent.trim() || '';
+                    const httpIsValid = isValidIPv4(httpIP) || isValidIPv6(httpIP);
 
-                    // Leak = WebRTC exposes a public IP different from HTTP IP
-                    const leaked = publicIPs.some(ip => httpIP && ip !== httpIP);
+                    // Leak = WebRTC exposes a public IP that differs from the
+                    // HTTP-detected one. If we have no valid HTTP IP to compare
+                    // against, we cannot assert a leak (avoid false positives).
+                    const leakedIPs = httpIsValid ? publicIPs.filter(ip => ip !== httpIP) : [];
+                    const leaked = leakedIPs.length > 0;
                     const hasPrivate = privateIPs.length > 0;
 
                     let detail;
                     if (leaked) {
-                        detail = `${t('leak_danger')}: ${publicIPs.filter(ip => ip !== httpIP).join(', ')}`;
+                        detail = `${t('leak_danger')}: ${leakedIPs.join(', ')}`;
                     } else if (publicIPs.length) {
                         detail = `${t('leak_safe')} (${publicIPs.join(', ')})`;
                     } else if (privateIPs.length) {
@@ -617,13 +671,17 @@ async function checkWebRTC() {
                     resolve({
                         ips: valid, publicIPs, privateIPs, hasPrivate,
                         safe: !leaked,
-                        leakedIPs: leaked ? publicIPs.filter(ip => ip !== httpIP) : [],
+                        leakedIPs,
                         detail
                     });
                     return;
                 }
-                const match = e.candidate.candidate.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([a-f0-9:]+)/gi);
-                if (match) match.forEach(ip => rawIPs.add(ip));
+                // Extract the connection-address field from the candidate line.
+                // Tokenize and test each token with strict validators rather
+                // than a loose catch-all regex.
+                e.candidate.candidate.split(/\s+/).forEach(tok => {
+                    if (isValidIPv4(tok) || isValidIPv6(tok)) rawIPs.add(tok.toLowerCase());
+                });
             };
             setTimeout(() => { pc.close(); resolve({ ips: [], publicIPs: [], privateIPs: [], hasPrivate: false, safe: true, leakedIPs: [], detail: t('webrtc_timeout') }); }, 5000);
         } catch {
@@ -777,14 +835,19 @@ function refreshDynamicContent() {
     renderIPProperty();
     renderGeoSources();
 
-    // Re-run leak checks for fresh i18n text, then re-render
-    if (hasRun) {
-        Promise.all([checkWebRTC(), checkDNSLeak()]).then(([freshWebrtc, freshDnsLeak]) => {
-            lastWebrtc = freshWebrtc;
-            lastDnsLeak = freshDnsLeak;
-            renderLeak(freshWebrtc, freshDnsLeak, checkFingerprint());
+    // Re-run only the leak checks that were previously run, to refresh i18n
+    // detail text, then re-render. Avoids surfacing unrequested results.
+    const pending = [];
+    if (lastWebrtc) pending.push(checkWebRTC().then(r => { lastWebrtc = r; }));
+    if (lastDnsLeak) pending.push(checkDNSLeak().then(r => { lastDnsLeak = r; }));
+    if (lastFp) lastFp = checkFingerprint();
+    if (pending.length) {
+        Promise.all(pending).then(() => {
+            renderLeak();
             showWebRTCLeakIP();
         });
+    } else if (lastFp) {
+        renderLeak();
     }
 
     // Rebuild summary with translated text
@@ -820,9 +883,10 @@ function rebuildSummary() {
     summaryRows.push(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> — ${loc}</div>`);
 
     if (lastLatResult) {
-        const pct = Math.round((lastLatResult.ok / lastLatResult.total) * 100);
+        const smooth = lastLatResult.smooth ?? lastLatResult.ok;
+        const pct = Math.round((smooth / lastLatResult.total) * 100);
         const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
-        summaryRows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${lastLatResult.ok}/${lastLatResult.total}</strong>${t('summary_reachable')} (${pct}%)</div>`);
+        summaryRows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${lastLatResult.ok}/${lastLatResult.total}</strong>${t('summary_reachable')} · ${t('summary_smooth')} <strong>${smooth}/${lastLatResult.total}</strong> (${pct}%)</div>`);
     }
 
     if (lastDnsResults) {
@@ -880,9 +944,10 @@ async function runAllChecks() {
 
     const latResult = await runLatency();           updateProgress(3);
     if (latResult) {
-        const pct = Math.round((latResult.ok / latResult.total) * 100);
+        const smooth = latResult.smooth ?? latResult.ok;
+        const pct = Math.round((smooth / latResult.total) * 100);
         const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
-        appendSummaryLine(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${latResult.ok}/${latResult.total}</strong>${t('summary_reachable')} (${pct}%)</div>`);
+        appendSummaryLine(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${latResult.ok}/${latResult.total}</strong>${t('summary_reachable')} · ${t('summary_smooth')} <strong>${smooth}/${latResult.total}</strong> (${pct}%)</div>`);
     }
 
     const dnsResults = await runDNS();              updateProgress(4);
@@ -995,28 +1060,56 @@ function generateReportMarkdown() {
 }
 
 function renderLeak(webrtc, dnsLeak, fp) {
+    // Fall back to stored state so individual cards can render partial results
+    webrtc = webrtc || lastWebrtc;
+    dnsLeak = dnsLeak || lastDnsLeak;
+    fp = fp || lastFp;
+
     const grid = document.getElementById('leakGrid');
-    grid.innerHTML = `
+
+    const webrtcItem = webrtc ? `
         <div class="leak-item">
             <i class="fas fa-video" style="color:${webrtc.safe ? 'var(--green)' : 'var(--red)'}"></i>
             <h4>${t('leak_webrtc')}</h4>
             <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? t('leak_no_leak') : t('leak_leaked')}</div>
             <p class="text-muted" style="font-size:12px;margin-top:8px">${webrtc.detail}</p>
-        </div>
+        </div>` : `
+        <div class="leak-item">
+            <i class="fas fa-video"></i>
+            <h4>${t('leak_webrtc')}</h4>
+            <div class="result pending">${t('leak_waiting')}</div>
+        </div>`;
+
+    const dnsItem = dnsLeak ? `
         <div class="leak-item">
             <i class="fas fa-shield-alt" style="color:${dnsLeak.safe ? 'var(--green)' : 'var(--yellow)'}"></i>
             <h4>${t('leak_dns')}</h4>
             <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? t('leak_safe_result') : t('leak_warn_result')}</div>
             <p class="text-muted" style="font-size:12px;margin-top:8px">${dnsLeak.detail}</p>
-        </div>
+        </div>` : `
+        <div class="leak-item">
+            <i class="fas fa-shield-alt"></i>
+            <h4>${t('leak_dns')}</h4>
+            <div class="result pending">${t('leak_waiting')}</div>
+        </div>`;
+
+    const fpItem = fp ? `
         <div class="leak-item">
             <i class="fas fa-fingerprint" style="color:var(--purple)"></i>
             <h4>${t('leak_fp')}</h4>
             <div class="result pending">${fp['Canvas Hash']}</div>
             <p class="text-muted" style="font-size:12px;margin-top:8px">${fp['WebGL Renderer']}</p>
+        </div>` : `
+        <div class="leak-item">
+            <i class="fas fa-fingerprint"></i>
+            <h4>${t('leak_fp')}</h4>
+            <div class="result pending">${t('leak_waiting')}</div>
         </div>`;
 
+    grid.innerHTML = webrtcItem + dnsItem + fpItem;
+
     const fpTable = document.getElementById('fpTable');
+    if (!fp) { fpTable.innerHTML = ''; return; }
     const fpLabelMap = {
         'User Agent': 'fp_user_agent', 'Platform': 'fp_platform', 'Language': 'fp_language',
         'Languages': 'fp_languages', 'Screen': 'fp_screen', 'Color Depth': 'fp_color_depth',
@@ -1030,6 +1123,40 @@ function renderLeak(webrtc, dnsLeak, fp) {
         const label = t(fpLabelMap[k]) || k;
         return `<div class="fp-row"><div class="fp-label">${label}</div><div class="fp-value">${v}</div></div>`;
     }).join('');
+}
+
+// ============================================================
+// Individual card actions (wrappers that render UI)
+// ============================================================
+
+async function runConnectivity() {
+    // Connectivity is measured by the latency table (reachable services)
+    return runLatency();
+}
+
+async function runWebRTCCard() {
+    setBadge('leakBadge', 'running');
+    lastWebrtc = await checkWebRTC();
+    hasRun = true;
+    showWebRTCLeakIP();
+    renderLeak();
+    setBadge('leakBadge', 'done');
+}
+
+async function runDNSLeakCard() {
+    setBadge('leakBadge', 'running');
+    lastDnsLeak = await checkDNSLeak();
+    hasRun = true;
+    renderLeak();
+    setBadge('leakBadge', 'done');
+}
+
+function runFingerprintCard() {
+    setBadge('leakBadge', 'running');
+    lastFp = checkFingerprint();
+    hasRun = true;
+    renderLeak();
+    setBadge('leakBadge', 'done');
 }
 
 // ============================================================

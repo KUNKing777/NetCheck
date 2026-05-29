@@ -1106,6 +1106,11 @@ footer {
     .detail-grid { grid-template-columns: 1fr; }
     .detail-item { border-right: none; }
     .detail-item:last-child { border-bottom: none; }
+    .lat-name { width: 90px; font-size: 12px; }
+    .dns-domain { width: 100px; font-size: 12px; }
+    .fp-label { width: 120px; font-size: 12px; }
+    .fp-value { font-size: 11px; }
+}
 
 /* IP property tags */
 .ip-tag {
@@ -1156,9 +1161,4 @@ footer {
 .geo-loc {
     color: var(--text);
     font-weight: 500;
-}
-    .lat-name { width: 90px; font-size: 12px; }
-    .dns-domain { width: 100px; font-size: 12px; }
-    .fp-label { width: 120px; font-size: 12px; }
-    .fp-value { font-size: 11px; }
 }
