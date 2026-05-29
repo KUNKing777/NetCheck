@@ -28,6 +28,13 @@ const DNS_TARGETS = [
     'deepseek.com', 'wikipedia.org',
 ];
 
+// DoH resolvers ordered by best availability in China
+const DNS_RESOLVERS = [
+    'https://doh.pub/resolve',        // DNSPod (Tencent)
+    'https://dns.alidns.com/resolve', // Alibaba DNS
+    'https://dns.google/resolve',     // Google (international fallback)
+];
+
 // ============================================================
 // i18n - Language Support
 // ============================================================
@@ -89,6 +96,8 @@ const i18n = {
         fp_webgl_vendor: 'WebGL 厂商', fp_webgl_renderer: 'WebGL 渲染器',
         fp_canvas_hash: 'Canvas 哈希', fp_audio_context: '音频指纹',
         btn_copy: '复制报告', report_title: 'NetCheck 网络诊断报告',
+        report_time: '时间', report_section_ip: 'IP 信息', report_section_network: '网络环境',
+        report_section_latency: '延迟测试', report_section_summary: '检测摘要',
         speed_testing: '测速中...', speed_fail: '测速失败', speed_mbps: ' Mbps',
         label_speed: '实测速度',
         toast_online: '网络已恢复连接', toast_offline: '网络连接已断开',
@@ -152,6 +161,8 @@ const i18n = {
         fp_webgl_renderer: 'WebGL Renderer', fp_canvas_hash: 'Canvas Hash',
         fp_audio_context: 'Audio Context',
         btn_copy: 'Copy Report', report_title: 'NetCheck Network Report',
+        report_time: 'Time', report_section_ip: 'IP Info', report_section_network: 'Network',
+        report_section_latency: 'Latency', report_section_summary: 'Summary',
         speed_testing: 'Testing...', speed_fail: 'Test failed', speed_mbps: ' Mbps',
         label_speed: 'Measured Speed',
         toast_online: 'Network reconnected', toast_offline: 'Network disconnected',
@@ -523,11 +534,19 @@ async function runDNS() {
         const stEl = row.querySelector('.dns-status');
 
         const start = performance.now();
-        try {
-            const r = await fetch(`https://dns.google/resolve?name=${d}&type=A`, { signal: AbortSignal.timeout(5000) });
-            const data = await r.json();
-            const ms = Math.round(performance.now() - start);
-            const ips = data.Answer?.map(a => a.data).join(', ') || t('dns_no_record');
+        let ok = false, ips = '', ms = 0;
+        for (const resolver of DNS_RESOLVERS) {
+            try {
+                const r = await fetch(`${resolver}?name=${d}&type=A`, { signal: AbortSignal.timeout(4000) });
+                if (!r.ok) continue;
+                const data = await r.json();
+                ms = Math.round(performance.now() - start);
+                ips = data.Answer?.map(a => a.data).join(', ') || t('dns_no_record');
+                ok = true;
+                break;
+            } catch {}
+        }
+        if (ok) {
             ipsEl.textContent = ips;
             ipsEl.classList.remove('text-muted');
             timeEl.textContent = `${ms} ms`;
@@ -535,7 +554,7 @@ async function runDNS() {
             timeEl.style.color = ms < 200 ? 'var(--green)' : ms < 500 ? 'var(--yellow)' : 'var(--orange)';
             stEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
             results.push({ domain: d, ok: true, ips, ms });
-        } catch {
+        } else {
             ipsEl.textContent = t('dns_resolve_fail');
             ipsEl.classList.remove('text-muted');
             ipsEl.style.color = 'var(--red)';
@@ -543,7 +562,7 @@ async function runDNS() {
             stEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
             results.push({ domain: d, ok: false, ips: 'Failed', ms: -1 });
         }
-    });
+    }););
 
     const dnsOk = results.filter(r => r.ok).length;
     setBadge('dnsBadge', 'done', `${dnsOk}/${DNS_TARGETS.length}`);
@@ -905,23 +924,27 @@ async function copyReport() {
 }
 
 function generateReportMarkdown() {
-    const lines = [`# ${t('report_title')}`, '', `**Time:** ${new Date().toISOString()}`, ''];
+    const ts = (d) => {
+        const p = new Date(d);
+        return `${p.getFullYear()}-${String(p.getMonth()+1).padStart(2,'0')}-${String(p.getDate()).padStart(2,'0')} ${String(p.getHours()).padStart(2,'0')}:${String(p.getMinutes()).padStart(2,'0')}:${String(p.getSeconds()).padStart(2,'0')}`;
+    };
+    const lines = [`# ${t('report_title')}`, '', `**${t('report_time')}:** ${ts(new Date())}`, ''];
 
     // IP
     const ip = document.getElementById('dIP')?.textContent || '--';
     const loc = document.getElementById('dLoc')?.textContent || '--';
     const isp = document.getElementById('dISP')?.textContent || '--';
-    lines.push('## IP', `- **IP:** ${ip}`, `- **Location:** ${loc}`, `- **ISP:** ${isp}`, '');
+    lines.push(`## ${t('report_section_ip')}`, `- **${t('label_ip')}:** ${ip}`, `- **${t('label_loc')}:** ${loc}`, `- **${t('label_isp')}:** ${isp}`, '');
 
     // Network
     const conn = document.getElementById('dConn')?.textContent || '--';
     const down = document.getElementById('dDown')?.textContent || '--';
     const rtt = document.getElementById('dRTT')?.textContent || '--';
     const ipv6 = document.getElementById('dIPv6')?.textContent || '--';
-    lines.push('## Network', `- **Connection:** ${conn}`, `- **Downlink:** ${down}`, `- **RTT:** ${rtt}`, `- **IPv6:** ${ipv6}`, '');
+    lines.push(`## ${t('report_section_network')}`, `- **${t('label_conn')}:** ${conn}`, `- **${t('label_down')}:** ${down}`, `- **${t('label_rtt')}:** ${rtt}`, `- **${t('label_ipv6')}:** ${ipv6}`, '');
 
     // Latency
-    lines.push('## Latency');
+    lines.push(`## ${t('report_section_latency')}`);
     SERVICES.forEach(s => {
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         const el = document.getElementById(`lat-${id}`);
@@ -931,7 +954,7 @@ function generateReportMarkdown() {
     lines.push('');
 
     // Summary lines
-    lines.push('## Summary');
+    lines.push(`## ${t('report_section_summary')}`);
     const summary = document.getElementById('summaryBox');
     if (summary) {
         summary.querySelectorAll('.summary-row').forEach(row => {
