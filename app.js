@@ -348,21 +348,9 @@ const GEO_FLAGS = {
 };
 
 function renderGeoSources() {
+    // Disabled: single consolidated result shown in hero/detail
     const el = document.getElementById('dGeoSources');
-    if (!el) return;
-    const okSources = ipSources.filter(s => s.ok);
-    if (okSources.length < 2) {
-        el.style.display = 'none';
-        return;
-    }
-    el.style.display = '';
-    el.innerHTML = okSources.map(s => {
-        const d = s.data;
-        const cc = (d.countryCode || '').toUpperCase();
-        const flag = GEO_FLAGS[cc] || '';
-        const label = s.api === 'ip-api.com' ? 'IP-API' : s.api;
-        return `<div class="geo-row"><span class="geo-source">${label}</span><span class="geo-flag">${flag}</span><span class="geo-loc">${d.country || '--'}, ${d.city || '--'}</span></div>`;
-    }).join('');
+    if (el) el.style.display = 'none';
 }
 
 function showWebRTCLeakIP() {
