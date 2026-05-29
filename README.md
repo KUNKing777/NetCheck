@@ -29,7 +29,7 @@ Pure static — no backend, no build tools, just open and use.
 | **网络环境** | 连接类型、下行速度、RTT、省流量模式 |
 | **延迟测试** | Ping 16 个国内外服务，带进度条和延迟分布图 |
 | **连通性检测** | 一键检测 Google、ChatGPT、Claude 等服务是否可达 |
-| **DNS 解析** | 通过 DoH 解析 10 个域名（DNSPod / 阿里 DNS / Google，自动故障转移），测量解析速度 |
+| **DNS 解析** | 通过 DoH 解析 10 个域名（阿里 DNS / Google，自动故障转移），测量解析速度 |
 | **WebRTC 泄露** | 检测真实 IP 是否通过 WebRTC 协议泄露 |
 | **DNS 泄露** | 通过 Cloudflare Trace 检测 DNS 是否暴露 |
 | **浏览器指纹** | Canvas、WebGL、Audio、UA 等多维指纹分析 |
@@ -54,7 +54,7 @@ Pure static — no backend, no build tools, just open and use.
 
 - **前端** — 纯 HTML / CSS / JavaScript，无框架、无构建工具
 - **设计** — Vercel Design System（Geist 字体、shadow-as-border）
-- **API** — ipapi.co、ipinfo.io、ip-api.com、doh.pub、dns.alidns.com、dns.google、Cloudflare Trace
+- **API** — ipapi.co、ipinfo.io、ip-api.com、dns.alidns.com、dns.google、Cloudflare Trace
 - **浏览器 API** — fetch、Network Information API、RTCPeerConnection、Canvas/WebGL/Audio
 
 ### 使用方法
@@ -79,7 +79,7 @@ open index.html
 | **Network Environment** | Connection type, downlink speed, RTT, data saver |
 | **Latency Test** | Ping 16 services with progress bar and distribution |
 | **Connectivity** | One-click check if Google, ChatGPT, Claude are reachable |
-| **DNS Resolution** | Resolve 10 domains via DoH (DNSPod / AliDNS / Google, auto failover), measure speed |
+| **DNS Resolution** | Resolve 10 domains via DoH (AliDNS / Google, auto failover), measure speed |
 | **WebRTC Leak** | Detect real IP leaking via WebRTC protocol |
 | **DNS Leak** | Detect DNS exposure via Cloudflare Trace |
 | **Fingerprint** | Canvas, WebGL, Audio, UA and more fingerprint analysis |
@@ -104,7 +104,7 @@ open index.html
 
 - **Frontend** — Pure HTML / CSS / JavaScript, no frameworks, no build tools
 - **Design** — Vercel Design System (Geist font, shadow-as-border)
-- **APIs** — ipapi.co, ipinfo.io, ip-api.com, doh.pub, dns.alidns.com, dns.google, Cloudflare Trace
+- **APIs** — ipapi.co, ipinfo.io, ip-api.com, dns.alidns.com, dns.google, Cloudflare Trace
 - **Browser APIs** — fetch, Network Information API, RTCPeerConnection, Canvas/WebGL/Audio
 
 ### Usage

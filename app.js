@@ -28,11 +28,16 @@ const DNS_TARGETS = [
     'deepseek.com', 'wikipedia.org',
 ];
 
-// DoH resolvers ordered by best availability in China
+// DoH resolvers (JSON API) ordered by best availability in China.
+// Only resolvers that send CORS headers (Access-Control-Allow-Origin) work
+// from a browser. AliDNS /resolve and its anycast IPs return CORS + JSON;
+// doh.pub was removed because it does NOT send CORS headers, and AliDNS
+// /dns-query only speaks RFC8484 wire-format (400 on JSON name queries).
 const DNS_RESOLVERS = [
-    { name: 'DNSPod',   url: 'https://doh.pub/dns-query' },
-    { name: 'AliDNS',   url: 'https://dns.alidns.com/dns-query' },
-    { name: 'Google',   url: 'https://dns.google/resolve' },
+    { name: 'AliDNS',    url: 'https://dns.alidns.com/resolve' },
+    { name: 'AliDNS-2',  url: 'https://223.6.6.6/resolve' },
+    { name: 'Google',    url: 'https://dns.google/resolve' },
+    { name: 'Cloudflare',url: 'https://cloudflare-dns.com/dns-query' },
 ];
 
 // ============================================================
@@ -51,7 +56,7 @@ const i18n = {
         feat_env: '网络环境', feat_env_desc: '连接类型、下行速度、RTT、省流模式',
         feat_latency: '延迟测试', feat_latency_desc: 'Ping 16 个服务：Google、ChatGPT、GitHub 等',
         feat_conn: '连通性', feat_conn_desc: '检测全球服务的可访问性',
-        feat_dns: 'DNS 解析', feat_dns_desc: '通过 DoH 解析域名（DNSPod/阿里/Google），测量速度',
+        feat_dns: 'DNS 解析', feat_dns_desc: '通过 DoH 解析域名（阿里/Google），测量速度',
         feat_webrtc: 'WebRTC 泄露', feat_webrtc_desc: '检测 WebRTC 协议导致的真实 IP 泄露',
         feat_dnsleak: 'DNS 泄露', feat_dnsleak_desc: '检查 DNS 查询是否在 VPN 外暴露',
         feat_fp: '浏览器指纹', feat_fp_desc: '浏览器与设备指纹分析',
@@ -116,7 +121,7 @@ const i18n = {
         feat_env: 'Network Env', feat_env_desc: 'Connection type, downlink, RTT, data saver',
         feat_latency: 'Latency Test', feat_latency_desc: 'Ping 16 services: Google, ChatGPT, GitHub, etc.',
         feat_conn: 'Connectivity', feat_conn_desc: 'Check accessibility of global services',
-        feat_dns: 'DNS Resolution', feat_dns_desc: 'Resolve domains via DoH (DNSPod/AliDNS/Google), measure speed',
+        feat_dns: 'DNS Resolution', feat_dns_desc: 'Resolve domains via DoH (AliDNS/Google), measure speed',
         feat_webrtc: 'WebRTC Leak', feat_webrtc_desc: 'Detect real IP leaking via WebRTC protocol',
         feat_dnsleak: 'DNS Leak', feat_dnsleak_desc: 'Check if DNS queries are exposed outside VPN',
         feat_fp: 'Fingerprint', feat_fp_desc: 'Browser & device fingerprint analysis',
