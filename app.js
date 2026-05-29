@@ -4,22 +4,22 @@
 // ============================================================
 
 const SERVICES = [
-    { name: 'Google',       icon: 'fab fa-google',      color: '#4285f4', url: 'https://www.google.com/favicon.ico' },
-    { name: 'ChatGPT',      icon: 'fas fa-robot',       color: '#10a37f', url: 'https://chatgpt.com/' },
-    { name: 'OpenAI API',   icon: 'fas fa-brain',       color: '#412991', url: 'https://api.openai.com/' },
-    { name: 'Claude',       icon: 'fas fa-microchip',   color: '#d97706', url: 'https://claude.ai/' },
-    { name: 'GitHub',       icon: 'fab fa-github',      color: '#6e40c9', url: 'https://github.com/favicon.ico' },
-    { name: 'YouTube',      icon: 'fab fa-youtube',     color: '#ff0000', url: 'https://www.youtube.com/favicon.ico' },
-    { name: 'Twitter/X',    icon: 'fab fa-x-twitter',   color: '#000',    url: 'https://x.com/favicon.ico' },
-    { name: 'Wikipedia',    icon: 'fab fa-wikipedia-w', color: '#636466', url: 'https://www.wikipedia.org/' },
-    { name: 'Cloudflare',   icon: 'fas fa-cloud',       color: '#f38020', url: 'https://www.cloudflare.com/favicon.ico' },
-    { name: 'Baidu',        icon: 'fas fa-search',      color: '#2932e1', url: 'https://www.baidu.com/favicon.ico' },
-    { name: 'Bilibili',     icon: 'fas fa-tv',          color: '#fb7299', url: 'https://www.bilibili.com/favicon.ico' },
-    { name: 'Zhihu',        icon: 'fas fa-comments',    color: '#0066ff', url: 'https://www.zhihu.com/favicon.ico' },
-    { name: 'Weibo',        icon: 'fas fa-fire',        color: '#e6162d', url: 'https://www.weibo.com/favicon.ico' },
-    { name: 'Douyin',       icon: 'fas fa-music',       color: '#000',    url: 'https://www.douyin.com/favicon.ico' },
-    { name: 'Tencent',      icon: 'fas fa-message',     color: '#12b7f5', url: 'https://www.tencent.com/favicon.ico' },
-    { name: 'DeepSeek',     icon: 'fas fa-dragon',      color: '#4d6bfe', url: 'https://www.deepseek.com/favicon.ico' },
+    { name: 'Google',       color: '#4285f4', url: 'https://www.google.com/favicon.ico',        favicon: 'https://www.google.com/favicon.ico' },
+    { name: 'ChatGPT',      color: '#10a37f', url: 'https://chatgpt.com/',                       favicon: 'https://chatgpt.com/favicon.ico' },
+    { name: 'OpenAI API',   color: '#412991', url: 'https://platform.openai.com/',               favicon: 'https://openai.com/favicon.ico' },
+    { name: 'Claude',       color: '#d97706', url: 'https://www.anthropic.com/',                 favicon: 'https://www.anthropic.com/favicon.ico' },
+    { name: 'GitHub',       color: '#6e40c9', url: 'https://github.com/favicon.ico',            favicon: 'https://github.com/favicon.ico' },
+    { name: 'YouTube',      color: '#ff0000', url: 'https://www.youtube.com/favicon.ico',       favicon: 'https://www.youtube.com/favicon.ico' },
+    { name: 'Twitter/X',    color: '#000',    url: 'https://x.com/favicon.ico',                  favicon: 'https://x.com/favicon.ico' },
+    { name: 'Wikipedia',    color: '#636466', url: 'https://www.wikipedia.org/',                 favicon: 'https://www.wikipedia.org/favicon.ico' },
+    { name: 'Cloudflare',   color: '#f38020', url: 'https://www.cloudflare.com/favicon.ico',    favicon: 'https://www.cloudflare.com/favicon.ico' },
+    { name: 'Baidu',        color: '#2932e1', url: 'https://www.baidu.com/favicon.ico',         favicon: 'https://www.baidu.com/favicon.ico' },
+    { name: 'Bilibili',     color: '#fb7299', url: 'https://www.bilibili.com/favicon.ico',      favicon: 'https://www.bilibili.com/favicon.ico' },
+    { name: 'Zhihu',        color: '#0066ff', url: 'https://www.zhihu.com/favicon.ico',         favicon: 'https://www.zhihu.com/favicon.ico' },
+    { name: 'Weibo',        color: '#e6162d', url: 'https://www.weibo.com/favicon.ico',         favicon: 'https://www.weibo.com/favicon.ico' },
+    { name: 'Douyin',       color: '#000',    url: 'https://www.douyin.com/favicon.ico',        favicon: 'https://www.douyin.com/favicon.ico' },
+    { name: 'Tencent',      color: '#12b7f5', url: 'https://www.tencent.com/favicon.ico',       favicon: 'https://www.tencent.com/favicon.ico' },
+    { name: 'DeepSeek',     color: '#4d6bfe', url: 'https://www.deepseek.com/favicon.ico',      favicon: 'https://www.deepseek.com/favicon.ico' },
 ];
 
 const DNS_TARGETS = [
@@ -61,6 +61,41 @@ const i18n = {
         leak_waiting: '等待检测', leak_safe: '安全', leak_warn: '注意', leak_danger: '泄露',
         summary_empty: '点击"开始检测"运行全面网络诊断',
         footer: 'NetCheck — 纯静态网络诊断工具 · 数据不会上传至任何服务器',
+        leak_no_leak: '无泄露', leak_leaked: '已泄露',
+        leak_safe_result: '安全', leak_warn_result: '注意',
+        summary_connectivity: '连通性', summary_reachable: '个服务可达',
+        summary_dns_title: 'DNS', summary_resolved: '个域名解析成功',
+        summary_webrtc_title: 'WebRTC', summary_webrtc_no_leak: '未检测到泄露',
+        summary_webrtc_leaked: 'IP 可能已泄露',
+        summary_dns_no_leak: '未检测到泄露', summary_dns_potential: '存在潜在泄露',
+        summary_domestic: '国内', summary_international: '国际',
+        running_diag: '正在运行全面诊断...',
+        ip_detect_fail: '检测失败',
+        env_unsupported: '不支持', env_on: '已开启', env_off: '已关闭',
+        status_online: '在线', status_offline: '离线',
+        ipv6_yes: '是', ipv6_ipv4_only: '否 (仅 IPv4)', ipv6_fail: '检测失败',
+        dns_no_record: '无记录', dns_resolve_fail: '解析失败',
+        latency_timeout: '超时',
+        webrtc_no_local: '未检测到本地 IP', webrtc_timeout: '超时 - 未检测到泄露',
+        webrtc_unsupported: 'WebRTC 不支持',
+        dnsleak_cf_prefix: 'Cloudflare 识别', dnsleak_cf_unavail: 'Cloudflare trace 不可用',
+        fp_enabled: '已启用', fp_disabled: '已禁用', fp_not_set: '未设置',
+        fp_cores: ' 核', fp_points: ' 点',
+        fp_yes: '是', fp_no: '否',
+        fp_user_agent: 'User Agent', fp_platform: '平台', fp_language: '语言',
+        fp_languages: '语言列表', fp_screen: '屏幕', fp_color_depth: '色深',
+        fp_timezone: '时区', fp_touch: '触控支持', fp_cookies: 'Cookie',
+        fp_dnt: '请勿追踪', fp_hw_concurrency: '硬件并发', fp_device_memory: '设备内存',
+        fp_webgl_vendor: 'WebGL 厂商', fp_webgl_renderer: 'WebGL 渲染器',
+        fp_canvas_hash: 'Canvas 哈希', fp_audio_context: '音频指纹',
+        btn_copy: '复制报告', report_title: 'NetCheck 网络诊断报告',
+        speed_testing: '测速中...', speed_fail: '测速失败', speed_mbps: ' Mbps',
+        label_speed: '实测速度',
+        toast_online: '网络已恢复连接', toast_offline: '网络连接已断开',
+        label_property: 'IP 属性', label_webrtc_ip: 'WebRTC 泄露 IP',
+        ip_hosting: '机房IP', ip_proxy: '代理/VPN', ip_mobile: '移动网络', ip_residential: '住宅IP',
+        toast_ip_change: 'IP 地址已发生变化',
+        report_copied: '已复制到剪贴板',
     },
     en: {
         nav_ip: 'IP Info', nav_latency: 'Latency', nav_dns: 'DNS', nav_security: 'Security',
@@ -88,6 +123,42 @@ const i18n = {
         leak_waiting: 'Waiting', leak_safe: 'Safe', leak_warn: 'Warning', leak_danger: 'Leaked',
         summary_empty: 'Click "Run Check" to start diagnostics',
         footer: 'NetCheck — Pure static network diagnostics tool · No data uploaded to any server',
+        leak_no_leak: 'No Leak', leak_leaked: 'Leaked',
+        leak_safe_result: 'Safe', leak_warn_result: 'Warning',
+        summary_connectivity: 'Connectivity', summary_reachable: ' services reachable',
+        summary_dns_title: 'DNS', summary_resolved: ' domains resolved',
+        summary_webrtc_title: 'WebRTC', summary_webrtc_no_leak: 'No leak detected',
+        summary_webrtc_leaked: 'IP may be leaked',
+        summary_dns_no_leak: 'No leak detected', summary_dns_potential: 'Potential leak',
+        summary_domestic: 'Domestic', summary_international: 'International',
+        running_diag: 'Running full diagnostics...',
+        ip_detect_fail: 'Detection failed',
+        env_unsupported: 'Unsupported', env_on: 'On', env_off: 'Off',
+        status_online: 'Online', status_offline: 'Offline',
+        ipv6_yes: 'Yes', ipv6_ipv4_only: 'No (IPv4 only)', ipv6_fail: 'Detection failed',
+        dns_no_record: 'No records', dns_resolve_fail: 'Resolve failed',
+        latency_timeout: 'Timeout',
+        webrtc_no_local: 'No local IP detected', webrtc_timeout: 'Timeout - no leak detected',
+        webrtc_unsupported: 'WebRTC not supported',
+        dnsleak_cf_prefix: 'Cloudflare detected', dnsleak_cf_unavail: 'Cloudflare trace unavailable',
+        fp_enabled: 'Enabled', fp_disabled: 'Disabled', fp_not_set: 'Not set',
+        fp_cores: ' cores', fp_points: ' points',
+        fp_yes: 'Yes', fp_no: 'No',
+        fp_user_agent: 'User Agent', fp_platform: 'Platform', fp_language: 'Language',
+        fp_languages: 'Languages', fp_screen: 'Screen', fp_color_depth: 'Color Depth',
+        fp_timezone: 'Timezone', fp_touch: 'Touch Support', fp_cookies: 'Cookies',
+        fp_dnt: 'Do Not Track', fp_hw_concurrency: 'Hardware Concurrency',
+        fp_device_memory: 'Device Memory', fp_webgl_vendor: 'WebGL Vendor',
+        fp_webgl_renderer: 'WebGL Renderer', fp_canvas_hash: 'Canvas Hash',
+        fp_audio_context: 'Audio Context',
+        btn_copy: 'Copy Report', report_title: 'NetCheck Network Report',
+        speed_testing: 'Testing...', speed_fail: 'Test failed', speed_mbps: ' Mbps',
+        label_speed: 'Measured Speed',
+        toast_online: 'Network reconnected', toast_offline: 'Network disconnected',
+        label_property: 'IP Type', label_webrtc_ip: 'WebRTC Leaked IP',
+        ip_hosting: 'Datacenter', ip_proxy: 'Proxy/VPN', ip_mobile: 'Mobile', ip_residential: 'Residential',
+        toast_ip_change: 'IP address has changed',
+        report_copied: 'Copied to clipboard',
     }
 };
 
@@ -109,7 +180,41 @@ function toggleLang() {
     currentLang = currentLang === 'zh' ? 'en' : 'zh';
     localStorage.setItem('netcheck_lang', currentLang);
     applyLang();
+    refreshDynamicContent();
 }
+
+function toggleMenu() {
+    const nav = document.getElementById('mainNav');
+    const btn = document.getElementById('btnHamburger');
+    nav.classList.toggle('open');
+    btn.classList.toggle('active');
+}
+
+function initDarkMode() {
+    const saved = localStorage.getItem('netcheck_dark');
+    if (saved === 'true' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    }
+}
+
+function toggleDark() {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('netcheck_dark', document.documentElement.classList.contains('dark'));
+}
+
+initDarkMode();
+
+// Close mobile nav when a link is clicked
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#mainNav .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('mainNav').classList.remove('open');
+            document.getElementById('btnHamburger').classList.remove('active');
+        });
+    });
+});
+
+// Actual DOMContentLoaded runs after; move below to avoid conflict
 
 // Progress tracking
 let totalSteps = 0;
@@ -145,62 +250,130 @@ function hideProgress() {
 // IP Detection
 // ============================================================
 
+let ipSources = [];
+let ipProxyInfo = {};
+
+async function fetchOneIP(api, url, mapper) {
+    try {
+        const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (r.ok) return { api, data: mapper(await r.json()), ok: true };
+    } catch {}
+    return { api, data: null, ok: false };
+}
+
 async function checkIP() {
     setBadge('ipBadge', 'running');
-    try {
-        let data = null;
-        // ipapi.co
-        try {
-            const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
-            if (r.ok) data = await r.json();
-        } catch {}
-        // ipinfo.io
-        if (!data) {
-            try {
-                const r = await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) {
-                    const d = await r.json();
-                    data = {
-                        ip: d.ip, city: d.city, region: d.region,
-                        country_name: d.country, org: d.org,
-                        timezone: d.timezone, asn: d.org?.split(' ')[0] || '--'
-                    };
-                }
-            } catch {}
-        }
-        // ip-api.com
-        if (!data) {
-            try {
-                const r = await fetch('https://ip-api.com/json/?fields=66846719', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) {
-                    const d = await r.json();
-                    data = {
-                        ip: d.query, city: d.city, region: d.regionName,
-                        country_name: d.country, org: d.isp,
-                        asn: d.as, timezone: d.timezone
-                    };
-                }
-            } catch {}
-        }
+    ipSources = [];
+    ipProxyInfo = {};
 
-        if (data) {
-            document.getElementById('heroIP').textContent = data.ip || '--';
-            document.getElementById('heroIP').classList.remove('skeleton');
-            document.getElementById('heroLoc').textContent = [data.city, data.country_name].filter(Boolean).join(', ');
-            document.getElementById('heroLoc').classList.remove('skeleton');
-            if (data.org) document.getElementById('heroISP').textContent = data.org;
-            document.getElementById('dIP').textContent = data.ip || '--';
-            document.getElementById('dLoc').textContent = [data.city, data.region, data.country_name].filter(Boolean).join(', ') || '--';
-            document.getElementById('dISP').textContent = data.org || '--';
-            document.getElementById('dASN').textContent = data.asn || data.as || '--';
-            document.getElementById('dCountry').textContent = data.country_name || '--';
-            document.getElementById('dTZ').textContent = data.timezone || '--';
-            setBadge('ipBadge', 'done', '完成');
-        } else { throw new Error('fail'); }
-    } catch {
-        document.getElementById('heroIP').textContent = '检测失败';
+    const results = await Promise.all([
+        fetchOneIP('ipapi.co', 'https://ipapi.co/json/', d => ({
+            ip: d.ip, city: d.city, region: d.region, country: d.country_name,
+            countryCode: d.country_code, org: d.org, timezone: d.timezone,
+            asn: d.asn, lat: d.latitude, lon: d.longitude,
+        })),
+        fetchOneIP('ipinfo.io', 'https://ipinfo.io/json', d => ({
+            ip: d.ip, city: d.city, region: d.region, country: d.country,
+            countryCode: d.country, org: d.org, timezone: d.timezone,
+            asn: d.org?.split(' ')[0] || '', lat: d.loc?.split(',')[0], lon: d.loc?.split(',')[1],
+        })),
+        fetchOneIP('ip-api.com', 'https://ip-api.com/json/?fields=67043327', d => ({
+            ip: d.query, city: d.city, region: d.regionName, country: d.country,
+            countryCode: d.countryCode, org: d.isp, timezone: d.timezone,
+            asn: d.as, asname: d.asname, lat: d.lat, lon: d.lon,
+            proxy: d.proxy, hosting: d.hosting, mobile: d.mobile,
+        })),
+    ]);
+
+    ipSources = results;
+
+    // Pick best data (prefer ip-api.com for ASN, ipapi.co for geo)
+    const best = (ipSources.find(r => r.ok) || {}).data || {};
+    const ipapiData = ipSources.find(r => r.api === 'ipapi.co' && r.ok)?.data || {};
+    const ipinfoData = ipSources.find(r => r.api === 'ipinfo.io' && r.ok)?.data || {};
+    const ipApiData = ipSources.find(r => r.api === 'ip-api.com' && r.ok)?.data || {};
+
+    if (best.ip) {
+        const ip = best.ip || ipApiData.ip || ipinfoData.ip || ipapiData.ip || '--';
+        const loc = [best.city || ipapiData.city, best.country || ipapiData.country].filter(Boolean).join(', ');
+
+        document.getElementById('heroIP').textContent = ip;
         document.getElementById('heroIP').classList.remove('skeleton');
-        setBadge('ipBadge', 'fail', '错误');
+        document.getElementById('heroLoc').textContent = loc;
+        document.getElementById('heroLoc').classList.remove('skeleton');
+        if (best.org || ipApiData.org) document.getElementById('heroISP').textContent = ipApiData.org || best.org || '--';
+
+        document.getElementById('dIP').textContent = ip;
+        document.getElementById('dLoc').textContent = [best.city || ipapiData.city, best.region || ipapiData.region, best.country || ipapiData.country].filter(Boolean).join(', ') || '--';
+        document.getElementById('dISP').textContent = ipApiData.org || best.org || '--';
+
+        // ASN formatting
+        const asnRaw = ipApiData.asn || ipApiData.as || ipapiData.asn || ipinfoData.asn || '';
+        const asOrg = ipApiData.asname || ipApiData.org || best.org || '';
+        document.getElementById('dASN').textContent = asnRaw ? (asOrg ? `${asnRaw} - ${asOrg}` : asnRaw) : '--';
+
+        document.getElementById('dCountry').textContent = best.country || ipapiData.country || '--';
+        document.getElementById('dTZ').textContent = best.timezone || ipapiData.timezone || '--';
+
+        // IP property: proxy / hosting / mobile
+        ipProxyInfo = { proxy: ipApiData.proxy, hosting: ipApiData.hosting, mobile: ipApiData.mobile };
+        renderIPProperty();
+
+        // Multi-source geo table
+        renderGeoSources();
+
+        setBadge('ipBadge', 'done');
+    } else {
+        document.getElementById('heroIP').textContent = t('ip_detect_fail');
+        document.getElementById('heroIP').classList.remove('skeleton');
+        setBadge('ipBadge', 'fail');
+    }
+}
+
+function renderIPProperty() {
+    const el = document.getElementById('dProperty');
+    if (!el) return;
+    const tags = [];
+    if (ipProxyInfo.hosting) tags.push(`<span class="ip-tag tag-dc" data-i18n-prop="ip_hosting">${t('ip_hosting')}</span>`);
+    else if (ipProxyInfo.proxy) tags.push(`<span class="ip-tag tag-proxy" data-i18n-prop="ip_proxy">${t('ip_proxy')}</span>`);
+    else if (ipProxyInfo.mobile) tags.push(`<span class="ip-tag tag-mobile" data-i18n-prop="ip_mobile">${t('ip_mobile')}</span>`);
+    else tags.push(`<span class="ip-tag tag-residential" data-i18n-prop="ip_residential">${t('ip_residential')}</span>`);
+    el.innerHTML = tags.join('');
+}
+
+const GEO_FLAGS = {
+    'CN': '🇨🇳', 'US': '🇺🇸', 'JP': '🇯🇵', 'GB': '🇬🇧', 'DE': '🇩🇪', 'FR': '🇫🇷',
+    'KR': '🇰🇷', 'SG': '🇸🇬', 'HK': '🇭🇰', 'TW': '🇹🇼', 'AU': '🇦🇺', 'CA': '🇨🇦',
+    'IN': '🇮🇳', 'BR': '🇧🇷', 'RU': '🇷🇺', 'NL': '🇳🇱', 'IT': '🇮🇹', 'ES': '🇪🇸',
+};
+
+function renderGeoSources() {
+    const el = document.getElementById('dGeoSources');
+    if (!el) return;
+    const okSources = ipSources.filter(s => s.ok);
+    if (okSources.length < 2) {
+        el.style.display = 'none';
+        return;
+    }
+    el.style.display = '';
+    el.innerHTML = okSources.map(s => {
+        const d = s.data;
+        const cc = (d.countryCode || '').toUpperCase();
+        const flag = GEO_FLAGS[cc] || '';
+        const label = s.api === 'ip-api.com' ? 'IP-API' : s.api;
+        return `<div class="geo-row"><span class="geo-source">${label}</span><span class="geo-flag">${flag}</span><span class="geo-loc">${d.country || '--'}, ${d.city || '--'}</span></div>`;
+    }).join('');
+}
+
+function showWebRTCLeakIP() {
+    const el = document.getElementById('dWebRTCIP');
+    if (!el || !lastWebrtc) return;
+    if (!lastWebrtc.safe && lastWebrtc.ips.length) {
+        el.textContent = lastWebrtc.ips.join(', ');
+        el.style.color = 'var(--red)';
+    } else {
+        el.textContent = t('leak_no_leak');
+        el.style.color = 'var(--green)';
     }
 }
 
@@ -214,16 +387,40 @@ function checkEnv() {
         setText('dConn', conn.effectiveType || conn.type || 'N/A');
         setText('dDown', conn.downlink ? `${conn.downlink} Mbps` : 'N/A');
         setText('dRTT', conn.rtt ? `${conn.rtt} ms` : 'N/A');
-        setText('dSaver', conn.saveData ? '已开启' : '已关闭');
+        setText('dSaver', conn.saveData ? t('env_on') : t('env_off'));
     } else {
-        setText('dConn', '不支持');
+        setText('dConn', t('env_unsupported'));
         setText('dDown', 'N/A');
         setText('dRTT', 'N/A');
         setText('dSaver', 'N/A');
     }
-    setText('dOnline', navigator.onLine ? '在线' : '离线');
+    setText('dOnline', navigator.onLine ? t('status_online') : t('status_offline'));
     document.getElementById('dOnline').style.color = navigator.onLine ? 'var(--green)' : 'var(--red)';
     checkIPv6();
+    runSpeedTest();
+}
+
+async function runSpeedTest() {
+    const el = document.getElementById('dSpeed');
+    if (!el) return;
+    el.textContent = t('speed_testing');
+    el.style.color = 'var(--accent)';
+
+    try {
+        const url = `https://picsum.photos/1024/768?random=${Date.now()}`;
+        const start = performance.now();
+        const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+        if (!r.ok) throw new Error('fail');
+        const blob = await r.blob();
+        const ms = performance.now() - start;
+        const sizeMB = blob.size / (1024 * 1024);
+        const speedMbps = ((sizeMB * 8) / (ms / 1000)).toFixed(1);
+        el.textContent = `${speedMbps}${t('speed_mbps')}`;
+        el.style.color = speedMbps > 10 ? 'var(--green)' : speedMbps > 2 ? 'var(--yellow)' : 'var(--red)';
+    } catch {
+        el.textContent = t('speed_fail');
+        el.style.color = 'var(--text-muted)';
+    }
 }
 
 async function checkIPv6() {
@@ -231,10 +428,10 @@ async function checkIPv6() {
         const r = await fetch('https://api64.ipify.org?format=json', { signal: AbortSignal.timeout(5000) });
         const d = await r.json();
         const isV6 = d.ip?.includes(':');
-        setText('dIPv6', isV6 ? `是 (${d.ip})` : '否 (仅 IPv4)');
+        setText('dIPv6', isV6 ? `${t('ipv6_yes')} (${d.ip})` : t('ipv6_ipv4_only'));
         document.getElementById('dIPv6').style.color = isV6 ? 'var(--green)' : 'var(--text-muted)';
     } catch {
-        setText('dIPv6', '检测失败');
+        setText('dIPv6', t('ipv6_fail'));
     }
 }
 
@@ -250,6 +447,19 @@ async function ping(url, timeout = 8000) {
     } catch { return -1; }
 }
 
+async function asyncPool(limit, items, fn) {
+    const results = [];
+    const executing = new Set();
+    for (const item of items) {
+        const p = Promise.resolve().then(() => fn(item));
+        results.push(p);
+        executing.add(p);
+        p.finally(() => executing.delete(p));
+        if (executing.size >= limit) await Promise.race(executing);
+    }
+    return Promise.all(results);
+}
+
 async function runLatency() {
     setBadge('latBadge', 'running');
     const table = document.getElementById('latencyTable');
@@ -259,7 +469,7 @@ async function runLatency() {
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         table.innerHTML += `
             <div class="lat-row" id="lat-${id}">
-                <div class="lat-icon" style="background:${s.color}12;color:${s.color}"><i class="${s.icon}"></i></div>
+                <div class="lat-icon" style="background:${s.color}18"><img src="${s.favicon}" alt="${s.name}" onerror="this.outerHTML='<span style=color:${s.color};font-weight:700;font-size:15px>${s.name[0]}</span>'"></div>
                 <div class="lat-name">${s.name}</div>
                 <div class="lat-bar-wrap"><div class="lat-bar fast" style="width:0%"></div></div>
                 <div class="lat-value text-muted">...</div>
@@ -268,18 +478,18 @@ async function runLatency() {
     });
 
     let ok = 0;
-    for (let i = 0; i < SERVICES.length; i++) {
-        const s = SERVICES[i];
+    await asyncPool(6, SERVICES, async (s) => {
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         const el = document.getElementById(`lat-${id}`);
-        if (!el) continue;
+        if (!el) return;
         const val = el.querySelector('.lat-value');
         const bar = el.querySelector('.lat-bar');
         const st = el.querySelector('.lat-status');
 
         const ms = await ping(s.url);
         if (ms === -1) {
-            val.textContent = '超时'; val.className = 'lat-value timeout';
+            val.textContent = t('latency_timeout');
+            val.className = 'lat-value timeout';
             bar.style.width = '100%'; bar.className = 'lat-bar timeout';
             st.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
         } else {
@@ -292,7 +502,8 @@ async function runLatency() {
             st.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
             ok++;
         }
-    }
+    });
+
     setBadge('latBadge', 'done', `${ok}/${SERVICES.length}`);
     return { ok, total: SERVICES.length };
 }
@@ -317,7 +528,7 @@ async function runDNS() {
     });
 
     const results = [];
-    for (const d of DNS_TARGETS) {
+    await asyncPool(6, DNS_TARGETS, async (d) => {
         const row = document.getElementById(`dns-${d.replace(/\./g, '-')}`);
         const ipsEl = row.querySelector('.dns-ips');
         const timeEl = row.querySelector('.dns-time');
@@ -328,7 +539,7 @@ async function runDNS() {
             const r = await fetch(`https://dns.google/resolve?name=${d}&type=A`, { signal: AbortSignal.timeout(5000) });
             const data = await r.json();
             const ms = Math.round(performance.now() - start);
-            const ips = data.Answer?.map(a => a.data).join(', ') || '无记录';
+            const ips = data.Answer?.map(a => a.data).join(', ') || t('dns_no_record');
             ipsEl.textContent = ips;
             ipsEl.classList.remove('text-muted');
             timeEl.textContent = `${ms} ms`;
@@ -337,14 +548,14 @@ async function runDNS() {
             stEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
             results.push({ domain: d, ok: true, ips, ms });
         } catch {
-            ipsEl.textContent = '解析失败';
+            ipsEl.textContent = t('dns_resolve_fail');
             ipsEl.classList.remove('text-muted');
             ipsEl.style.color = 'var(--red)';
             timeEl.textContent = '--';
             stEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
             results.push({ domain: d, ok: false, ips: 'Failed', ms: -1 });
         }
-    }
+    });
 
     const dnsOk = results.filter(r => r.ok).length;
     setBadge('dnsBadge', 'done', `${dnsOk}/${DNS_TARGETS.length}`);
@@ -371,16 +582,16 @@ async function checkWebRTC() {
                     resolve({
                         ips: list, hasPrivate, hasV6,
                         safe: list.length <= 1,
-                        detail: list.length ? list.join(', ') : '未检测到本地 IP'
+                        detail: list.length ? list.join(', ') : t('webrtc_no_local')
                     });
                     return;
                 }
                 const match = e.candidate.candidate.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([a-f0-9:]+)/gi);
                 if (match) match.forEach(ip => ips.add(ip));
             };
-            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: '超时 - 未检测到泄露' }); }, 5000);
+            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: t('webrtc_timeout') }); }, 5000);
         } catch {
-            resolve({ ips: [], safe: true, detail: 'WebRTC 不支持' });
+            resolve({ ips: [], safe: true, detail: t('webrtc_unsupported') });
         }
     });
 }
@@ -403,10 +614,10 @@ async function checkDNSLeak() {
             location: data.loc || '--',
             warp: data.warp || '--',
             safe: data.warp === 'off' || !data.warp,
-            detail: `Cloudflare 识别: ${data.ip} (${data.loc}) | WARP: ${data.warp || 'N/A'}`
+            detail: `${t('dnsleak_cf_prefix')}: ${data.ip} (${data.loc}) | WARP: ${data.warp || 'N/A'}`
         };
     } catch {
-        return { ip: '--', safe: true, detail: 'Cloudflare trace 不可用' };
+        return { ip: '--', safe: true, detail: t('dnsleak_cf_unavail') };
     }
 }
 
@@ -423,10 +634,11 @@ function checkFingerprint() {
     fp['Screen'] = `${screen.width}x${screen.height} @ ${window.devicePixelRatio}x`;
     fp['Color Depth'] = `${screen.colorDepth}-bit`;
     fp['Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone || '--';
-    fp['Touch Support'] = navigator.maxTouchPoints > 0 ? `是 (${navigator.maxTouchPoints} 点)` : '否';
-    fp['Cookies'] = navigator.cookieEnabled ? '已启用' : '已禁用';
-    fp['Do Not Track'] = navigator.doNotTrack || '未设置';
-    fp['Hardware Concurrency'] = `${navigator.hardwareConcurrency || '?'} 核`;
+    const yes = t('fp_yes');
+    fp['Touch Support'] = navigator.maxTouchPoints > 0 ? `${yes} (${navigator.maxTouchPoints}${t('fp_points')})` : t('fp_no');
+    fp['Cookies'] = navigator.cookieEnabled ? t('fp_enabled') : t('fp_disabled');
+    fp['Do Not Track'] = navigator.doNotTrack || t('fp_not_set');
+    fp['Hardware Concurrency'] = `${navigator.hardwareConcurrency || '?'}${t('fp_cores')}`;
     fp['Device Memory'] = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'N/A';
     fp['WebGL Vendor'] = getWebGLInfo().vendor;
     fp['WebGL Renderer'] = getWebGLInfo().renderer;
@@ -514,81 +726,81 @@ function setBadge(id, state, text) {
 // Run All
 // ============================================================
 
-async function runAllChecks() {
-    const btn = document.getElementById('btnRun');
-    btn.classList.add('running');
-    btn.disabled = true;
-    document.getElementById('summaryBox').innerHTML = '<div class="summary-empty"><i class="fas fa-spinner fa-spin"></i><p>正在运行全面诊断...</p></div>';
+let summaryRows = [];
+let lastLatResult = null;
+let lastDnsResults = null;
+let lastWebrtc = null;
+let lastDnsLeak = null;
+let lastFp = null;
+let hasRun = false;
 
-    // Progress: 7 major steps
-    initProgress(7);
+function refreshDynamicContent() {
+    if (!hasRun) return;
 
-    await checkIP();        updateProgress(1);
-    checkEnv();             updateProgress(2);
-    const latResult = await runLatency();   updateProgress(3);
-    const dnsResults = await runDNS();      updateProgress(4);
-    const webrtc = await checkWebRTC();     updateProgress(5);
-    const dnsLeak = await checkDNSLeak();   updateProgress(6);
-    const fp = checkFingerprint();          updateProgress(7);
+    // Re-render IP properties with new language
+    renderIPProperty();
+    renderGeoSources();
 
-    renderLeak(webrtc, dnsLeak, fp);
-    setBadge('leakBadge', 'done', '完成');
-    generateSummary(latResult, dnsResults, webrtc, dnsLeak);
+    // Re-run leak checks for fresh i18n text, then re-render
+    if (hasRun) {
+        Promise.all([checkWebRTC(), checkDNSLeak()]).then(([freshWebrtc, freshDnsLeak]) => {
+            lastWebrtc = freshWebrtc;
+            lastDnsLeak = freshDnsLeak;
+            renderLeak(freshWebrtc, freshDnsLeak, checkFingerprint());
+            showWebRTCLeakIP();
+        });
+    }
 
-    hideProgress();
-    btn.classList.remove('running');
-    btn.disabled = false;
+    // Rebuild summary with translated text
+    rebuildSummary();
+
+    // Update latency timeout text
+    document.querySelectorAll('.lat-value.timeout').forEach(el => {
+        el.textContent = t('latency_timeout');
+    });
+
+    // Update DNS fail/no-record texts
+    DNS_TARGETS.forEach(d => {
+        const row = document.getElementById(`dns-${d.replace(/\./g, '-')}`);
+        if (!row) return;
+        const ipsEl = row.querySelector('.dns-ips');
+        if (!ipsEl) return;
+        const text = ipsEl.textContent.trim();
+        if (text === '解析失败' || text === 'Resolve failed' || text === t('dns_resolve_fail')) {
+            ipsEl.textContent = t('dns_resolve_fail');
+        }
+        if (text === '无记录' || text === 'No records' || text === t('dns_no_record')) {
+            ipsEl.textContent = t('dns_no_record');
+        }
+    });
 }
 
-function renderLeak(webrtc, dnsLeak, fp) {
-    const grid = document.getElementById('leakGrid');
-    grid.innerHTML = `
-        <div class="leak-item">
-            <i class="fas fa-video" style="color:${webrtc.safe ? 'var(--green)' : 'var(--red)'}"></i>
-            <h4>WebRTC 泄露</h4>
-            <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? '无泄露' : '已泄露'}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:8px">${webrtc.detail}</p>
-        </div>
-        <div class="leak-item">
-            <i class="fas fa-shield-alt" style="color:${dnsLeak.safe ? 'var(--green)' : 'var(--yellow)'}"></i>
-            <h4>DNS 泄露</h4>
-            <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? '安全' : '注意'}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:8px">${dnsLeak.detail}</p>
-        </div>
-        <div class="leak-item">
-            <i class="fas fa-fingerprint" style="color:var(--purple)"></i>
-            <h4>浏览器指纹</h4>
-            <div class="result pending">${fp['Canvas Hash']}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:8px">${fp['WebGL Renderer']}</p>
-        </div>`;
+function rebuildSummary() {
+    if (!hasRun || !lastLatResult) return;
+    summaryRows = [];
 
-    const fpTable = document.getElementById('fpTable');
-    fpTable.innerHTML = Object.entries(fp).map(([k, v]) =>
-        `<div class="fp-row"><div class="fp-label">${k}</div><div class="fp-value">${v}</div></div>`
-    ).join('');
-}
+    const ip = document.getElementById('dIP')?.textContent || '--';
+    const loc = document.getElementById('dLoc')?.textContent || '--';
+    summaryRows.push(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> — ${loc}</div>`);
 
-function generateSummary(latResult, dnsResults, webrtc, dnsLeak) {
-    const el = document.getElementById('summaryBox');
-    const rows = [];
-
-    const ip = document.getElementById('dIP').textContent;
-    const loc = document.getElementById('dLoc').textContent;
-    rows.push(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> — ${loc}</div>`);
-
-    if (latResult) {
-        const pct = Math.round((latResult.ok / latResult.total) * 100);
+    if (lastLatResult) {
+        const pct = Math.round((lastLatResult.ok / lastLatResult.total) * 100);
         const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
-        rows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> 连通性: <strong>${latResult.ok}/${latResult.total}</strong> 个服务可达 (${pct}%)</div>`);
+        summaryRows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${lastLatResult.ok}/${lastLatResult.total}</strong>${t('summary_reachable')} (${pct}%)</div>`);
     }
 
-    if (dnsResults) {
-        const dnsOk = dnsResults.filter(r => r.ok).length;
-        rows.push(`<div class="summary-row"><i class="fas fa-search text-green"></i> DNS: <strong>${dnsOk}/${dnsResults.length}</strong> 个域名解析成功</div>`);
+    if (lastDnsResults) {
+        const dnsOk = lastDnsResults.filter(r => r.ok).length;
+        summaryRows.push(`<div class="summary-row"><i class="fas fa-search text-green"></i> ${t('summary_dns_title')}: <strong>${dnsOk}/${lastDnsResults.length}</strong>${t('summary_resolved')}</div>`);
     }
 
-    rows.push(`<div class="summary-row"><i class="fas fa-video ${webrtc.safe ? 'text-green' : 'text-red'}"></i> WebRTC: ${webrtc.safe ? '未检测到泄露' : 'IP 可能已泄露'}</div>`);
-    rows.push(`<div class="summary-row"><i class="fas fa-shield-alt ${dnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> DNS: ${dnsLeak.safe ? '未检测到泄露' : '存在潜在泄露'}</div>`);
+    if (lastWebrtc) {
+        summaryRows.push(`<div class="summary-row"><i class="fas fa-video ${lastWebrtc.safe ? 'text-green' : 'text-red'}"></i> ${t('summary_webrtc_title')}: ${lastWebrtc.safe ? t('summary_webrtc_no_leak') : t('summary_webrtc_leaked')}</div>`);
+    }
+
+    if (lastDnsLeak) {
+        summaryRows.push(`<div class="summary-row"><i class="fas fa-shield-alt ${lastDnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> ${t('summary_dns_title')}: ${lastDnsLeak.safe ? t('summary_dns_no_leak') : t('summary_dns_potential')}</div>`);
+    }
 
     // Domestic vs International
     const domestic = ['Baidu', 'Bilibili', 'Zhihu', 'Weibo', 'Douyin', 'Tencent'];
@@ -602,9 +814,228 @@ function generateSummary(latResult, dnsResults, webrtc, dnsLeak) {
         const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`);
         if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) intOk++;
     });
-    rows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> 国内: <strong>${domOk}/${domestic.length}</strong> | 国际: <strong>${intOk}/${intl.length}</strong></div>`);
+    summaryRows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> ${t('summary_domestic')}: <strong>${domOk}/${domestic.length}</strong> | ${t('summary_international')}: <strong>${intOk}/${intl.length}</strong></div>`);
 
-    el.innerHTML = rows.join('');
+    document.getElementById('summaryBox').innerHTML = summaryRows.join('');
+}
+
+function appendSummaryLine(html) {
+    summaryRows.push(html);
+    const el = document.getElementById('summaryBox');
+    el.innerHTML = summaryRows.join('');
+}
+
+async function runAllChecks() {
+    const btn = document.getElementById('btnRun');
+    btn.classList.add('running');
+    btn.disabled = true;
+    summaryRows = [];
+    document.getElementById('summaryBox').innerHTML = `<div class="summary-empty"><i class="fas fa-spinner fa-spin"></i><p>${t('running_diag')}</p></div>`;
+
+    initProgress(7);
+
+    await checkIP();                                updateProgress(1);
+    const ip = document.getElementById('dIP').textContent;
+    const loc = document.getElementById('dLoc').textContent;
+    summaryRows = [];
+    appendSummaryLine(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> — ${loc}</div>`);
+
+    checkEnv();                                     updateProgress(2);
+
+    const latResult = await runLatency();           updateProgress(3);
+    if (latResult) {
+        const pct = Math.round((latResult.ok / latResult.total) * 100);
+        const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
+        appendSummaryLine(`<div class="summary-row"><i class="fas fa-server ${c}"></i> ${t('summary_connectivity')}: <strong>${latResult.ok}/${latResult.total}</strong>${t('summary_reachable')} (${pct}%)</div>`);
+    }
+
+    const dnsResults = await runDNS();              updateProgress(4);
+    if (dnsResults) {
+        const dnsOk = dnsResults.filter(r => r.ok).length;
+        appendSummaryLine(`<div class="summary-row"><i class="fas fa-search text-green"></i> ${t('summary_dns_title')}: <strong>${dnsOk}/${dnsResults.length}</strong>${t('summary_resolved')}</div>`);
+    }
+
+    const webrtc = await checkWebRTC();             updateProgress(5);
+    appendSummaryLine(`<div class="summary-row"><i class="fas fa-video ${webrtc.safe ? 'text-green' : 'text-red'}"></i> ${t('summary_webrtc_title')}: ${webrtc.safe ? t('summary_webrtc_no_leak') : t('summary_webrtc_leaked')}</div>`);
+
+    const dnsLeak = await checkDNSLeak();           updateProgress(6);
+    appendSummaryLine(`<div class="summary-row"><i class="fas fa-shield-alt ${dnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> ${t('summary_dns_title')}: ${dnsLeak.safe ? t('summary_dns_no_leak') : t('summary_dns_potential')}</div>`);
+
+    const fp = checkFingerprint();                  updateProgress(7);
+
+    // Store for language re-render
+    lastLatResult = latResult;
+    lastDnsResults = dnsResults;
+    lastWebrtc = webrtc;
+    showWebRTCLeakIP();
+    lastDnsLeak = dnsLeak;
+    lastFp = fp;
+    hasRun = true;
+    renderLeak(webrtc, dnsLeak, fp);
+    setBadge('leakBadge', 'done');
+
+    // Domestic vs International
+    const domestic = ['Baidu', 'Bilibili', 'Zhihu', 'Weibo', 'Douyin', 'Tencent'];
+    const intl = ['Google', 'ChatGPT', 'OpenAI API', 'Claude', 'YouTube', 'Twitter/X'];
+    let domOk = 0, intOk = 0;
+    domestic.forEach(n => {
+        const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`);
+        if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) domOk++;
+    });
+    intl.forEach(n => {
+        const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`);
+        if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) intOk++;
+    });
+    appendSummaryLine(`<div class="summary-row"><i class="fas fa-flag text-green"></i> ${t('summary_domestic')}: <strong>${domOk}/${domestic.length}</strong> | ${t('summary_international')}: <strong>${intOk}/${intl.length}</strong></div>`);
+
+    hideProgress();
+    btn.classList.remove('running');
+    btn.disabled = false;
+    document.getElementById('summaryActions').style.display = 'flex';
+}
+
+async function copyReport() {
+    const markdown = generateReportMarkdown();
+    try {
+        await navigator.clipboard.writeText(markdown);
+        const btn = document.getElementById('btnCopyReport');
+        btn.classList.add('copied');
+        btn.querySelector('span').textContent = t('report_copied');
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = t('btn_copy');
+        }, 2000);
+    } catch {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = markdown;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+}
+
+function generateReportMarkdown() {
+    const lines = [`# ${t('report_title')}`, '', `**Time:** ${new Date().toISOString()}`, ''];
+
+    // IP
+    const ip = document.getElementById('dIP')?.textContent || '--';
+    const loc = document.getElementById('dLoc')?.textContent || '--';
+    const isp = document.getElementById('dISP')?.textContent || '--';
+    lines.push('## IP', `- **IP:** ${ip}`, `- **Location:** ${loc}`, `- **ISP:** ${isp}`, '');
+
+    // Network
+    const conn = document.getElementById('dConn')?.textContent || '--';
+    const down = document.getElementById('dDown')?.textContent || '--';
+    const rtt = document.getElementById('dRTT')?.textContent || '--';
+    const ipv6 = document.getElementById('dIPv6')?.textContent || '--';
+    lines.push('## Network', `- **Connection:** ${conn}`, `- **Downlink:** ${down}`, `- **RTT:** ${rtt}`, `- **IPv6:** ${ipv6}`, '');
+
+    // Latency
+    lines.push('## Latency');
+    SERVICES.forEach(s => {
+        const id = s.name.replace(/[^a-zA-Z]/g, '');
+        const el = document.getElementById(`lat-${id}`);
+        const val = el?.querySelector('.lat-value')?.textContent || '--';
+        lines.push(`- **${s.name}:** ${val}`);
+    });
+    lines.push('');
+
+    // Summary lines
+    lines.push('## Summary');
+    const summary = document.getElementById('summaryBox');
+    if (summary) {
+        summary.querySelectorAll('.summary-row').forEach(row => {
+            lines.push(`- ${row.textContent.trim()}`);
+        });
+    }
+
+    return lines.join('\n');
+}
+
+function renderLeak(webrtc, dnsLeak, fp) {
+    const grid = document.getElementById('leakGrid');
+    grid.innerHTML = `
+        <div class="leak-item">
+            <i class="fas fa-video" style="color:${webrtc.safe ? 'var(--green)' : 'var(--red)'}"></i>
+            <h4>${t('leak_webrtc')}</h4>
+            <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? t('leak_no_leak') : t('leak_leaked')}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${webrtc.detail}</p>
+        </div>
+        <div class="leak-item">
+            <i class="fas fa-shield-alt" style="color:${dnsLeak.safe ? 'var(--green)' : 'var(--yellow)'}"></i>
+            <h4>${t('leak_dns')}</h4>
+            <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? t('leak_safe_result') : t('leak_warn_result')}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${dnsLeak.detail}</p>
+        </div>
+        <div class="leak-item">
+            <i class="fas fa-fingerprint" style="color:var(--purple)"></i>
+            <h4>${t('leak_fp')}</h4>
+            <div class="result pending">${fp['Canvas Hash']}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${fp['WebGL Renderer']}</p>
+        </div>`;
+
+    const fpTable = document.getElementById('fpTable');
+    const fpLabelMap = {
+        'User Agent': 'fp_user_agent', 'Platform': 'fp_platform', 'Language': 'fp_language',
+        'Languages': 'fp_languages', 'Screen': 'fp_screen', 'Color Depth': 'fp_color_depth',
+        'Timezone': 'fp_timezone', 'Touch Support': 'fp_touch', 'Cookies': 'fp_cookies',
+        'Do Not Track': 'fp_dnt', 'Hardware Concurrency': 'fp_hw_concurrency',
+        'Device Memory': 'fp_device_memory', 'WebGL Vendor': 'fp_webgl_vendor',
+        'WebGL Renderer': 'fp_webgl_renderer', 'Canvas Hash': 'fp_canvas_hash',
+        'Audio Context': 'fp_audio_context',
+    };
+    fpTable.innerHTML = Object.entries(fp).map(([k, v]) => {
+        const label = t(fpLabelMap[k]) || k;
+        return `<div class="fp-row"><div class="fp-label">${label}</div><div class="fp-value">${v}</div></div>`;
+    }).join('');
+}
+
+// ============================================================
+// Monitoring & Toast
+// ============================================================
+
+function showToast(msg, type) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type || 'info'}`;
+    const icon = type === 'warn' ? 'fa-exclamation-triangle' : type === 'error' ? 'fa-times-circle' : 'fa-info-circle';
+    toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
+}
+
+let lastOnlineStatus = null;
+let lastIP = null;
+
+function startMonitor() {
+    // Monitor online/offline
+    lastOnlineStatus = navigator.onLine;
+    window.addEventListener('online', () => {
+        if (lastOnlineStatus === false) showToast(t('toast_online'), 'info');
+        lastOnlineStatus = true;
+    });
+    window.addEventListener('offline', () => {
+        showToast(t('toast_offline'), 'error');
+        lastOnlineStatus = false;
+    });
+
+    // Poll IP changes every 30s
+    setInterval(async () => {
+        try {
+            const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
+            if (r.ok) {
+                const data = await r.json();
+                if (lastIP && lastIP !== data.ip) {
+                    showToast(`${t('toast_ip_change')}: ${data.ip}`, 'warn');
+                    document.getElementById('heroIP').textContent = data.ip;
+                    document.getElementById('dIP').textContent = data.ip;
+                }
+                lastIP = data.ip;
+            }
+        } catch {}
+    }, 30000);
 }
 
 // ============================================================
@@ -667,4 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply language
     applyLang();
+
+    // Start monitoring
+    startMonitor();
 });

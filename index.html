@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NetCheck — Network Diagnostics</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='4' y1='4' x2='28' y2='28'%3E%3Cstop offset='0%25' stop-color='%230070f3'/%3E%3Cstop offset='100%25' stop-color='%2300a2ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' stroke='url(%23g)' stroke-width='2.5' fill='none'/%3E%3Ccircle cx='9' cy='11' r='3' fill='url(%23g)'/%3E%3Ccircle cx='23' cy='11' r='3' fill='url(%23g)'/%3E%3Ccircle cx='16' cy='23' r='3' fill='url(%23g)'/%3E%3Cline x1='11.5' y1='12.5' x2='20.5' y2='12.5' stroke='url(%23g)' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='10.8' y1='13.8' x2='14.5' y2='20.5' stroke='url(%23g)' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='21.2' y1='13.8' x2='17.5' y2='20.5' stroke='url(%23g)' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2' fill='url(%23g)'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,15 +16,43 @@
     <header>
         <div class="container header-inner">
             <a class="logo" href="#">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="2" y1="2" x2="26" y2="26">
+                            <stop offset="0%" stop-color="#0070f3"/>
+                            <stop offset="100%" stop-color="#00a2ff"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- outer ring -->
+                    <circle cx="14" cy="14" r="12" stroke="url(#logoGrad)" stroke-width="2" fill="none"/>
+                    <!-- network nodes -->
+                    <circle cx="8" cy="10" r="2.5" fill="url(#logoGrad)"/>
+                    <circle cx="20" cy="10" r="2.5" fill="url(#logoGrad)"/>
+                    <circle cx="14" cy="20" r="2.5" fill="url(#logoGrad)"/>
+                    <!-- connections -->
+                    <line x1="10" y1="11.5" x2="17.5" y2="11.5" stroke="url(#logoGrad)" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="9.3" y1="12.2" x2="12.8" y2="17.8" stroke="url(#logoGrad)" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="18.7" y1="12.2" x2="15.2" y2="17.8" stroke="url(#logoGrad)" stroke-width="1.8" stroke-linecap="round"/>
+                    <!-- center pulse dot -->
+                    <circle cx="14" cy="14" r="1.5" fill="url(#logoGrad)" opacity="0.6">
+                        <animate attributeName="r" values="1.5;4;1.5" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
                 <span>NetCheck</span>
             </a>
-            <nav>
+            <button class="btn-hamburger" id="btnHamburger" onclick="toggleMenu()" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <nav id="mainNav">
                 <a href="#ip" class="nav-link" data-section="ip" data-i18n="nav_ip">IP 信息</a>
                 <a href="#latency" class="nav-link" data-section="latency" data-i18n="nav_latency">延迟测试</a>
                 <a href="#dns" class="nav-link" data-section="dns" data-i18n="nav_dns">DNS 解析</a>
                 <a href="#leak" class="nav-link" data-section="leak" data-i18n="nav_security">安全检测</a>
             </nav>
+            <button class="btn-dark" id="btnDark" onclick="toggleDark()" aria-label="Dark mode" data-i18n-title="dark_toggle">
+                <i class="fas fa-moon"></i>
+            </button>
             <button class="btn-lang" id="btnLang" onclick="toggleLang()">EN</button>
             <button class="btn-run" id="btnRun" onclick="runAllChecks()">
                 <span class="btn-radar">
@@ -120,14 +149,20 @@
             <div class="detail-item"><label data-i18n="label_loc">位置</label><span id="dLoc" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_isp">ISP</label><span id="dISP" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_asn">ASN</label><span id="dASN" class="mono skeleton-text">--</span></div>
+            <div class="detail-item"><label data-i18n="label_property">IP 属性</label><span id="dProperty" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_country">国家</label><span id="dCountry" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label data-i18n="label_webrtc_ip">WebRTC 泄露 IP</label><span id="dWebRTCIP" class="mono skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_tz">时区</label><span id="dTZ" class="mono skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_conn">连接类型</label><span id="dConn" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_down">下行速度</label><span id="dDown" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_rtt">RTT</label><span id="dRTT" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_ipv6">IPv6</label><span id="dIPv6" class="mono skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_saver">省流模式</label><span id="dSaver" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label data-i18n="label_speed">实测速度</label><span id="dSpeed" class="skeleton-text">--</span></div>
             <div class="detail-item"><label data-i18n="label_online">在线状态</label><span id="dOnline" class="skeleton-text">--</span></div>
+        </div>
+        <div class="geo-sources" id="dGeoSources">
+            <div class="geo-row"><span class="geo-source">--</span></div>
         </div>
     </section>
 
@@ -190,6 +225,11 @@
                 <p data-i18n="summary_empty">点击"开始检测"运行全面网络诊断</p>
             </div>
         </div>
+        <div class="summary-actions" id="summaryActions" style="display:none">
+            <button class="btn-copy" id="btnCopyReport" onclick="copyReport()">
+                <i class="fas fa-copy"></i> <span data-i18n="btn_copy">复制报告</span>
+            </button>
+        </div>
     </section>
 
     <footer>
@@ -198,6 +238,7 @@
         </div>
     </footer>
 
+    <div class="toast-container" id="toastContainer"></div>
     <script src="app.js"></script>
 </body>
 </html>
