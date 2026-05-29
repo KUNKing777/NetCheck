@@ -31,20 +31,18 @@ Pure static — no backend, no build tools, just open and use.
 
 ## Services Tested
 
-```
-International                          Domestic
-─────────────────────────────────────  ──────────────────
-Google                                 Baidu
-ChatGPT                                Bilibili
-OpenAI API                             Zhihu
-Claude                                 Weibo
-GitHub                                 Douyin
-YouTube                                Tencent
-Twitter / X
-Wikipedia
-Cloudflare
-DeepSeek
-```
+| International | Domestic |
+|---------------|----------|
+| Google        | Baidu    |
+| ChatGPT       | Bilibili |
+| OpenAI API    | Zhihu    |
+| Claude        | Weibo    |
+| GitHub        | Douyin   |
+| YouTube       | Tencent  |
+| Twitter / X   |          |
+| Wikipedia     |          |
+| Cloudflare    |          |
+| DeepSeek      |          |
 
 ## Tech Stack
 
