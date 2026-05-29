@@ -567,7 +567,7 @@ async function runDNS() {
             stEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
             results.push({ domain: d, ok: false, ips: 'Failed', ms: -1 });
         }
-    }););
+    });
 
     const dnsOk = results.filter(r => r.ok).length;
     setBadge('dnsBadge', 'done', `${dnsOk}/${DNS_TARGETS.length}`);
