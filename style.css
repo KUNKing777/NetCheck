@@ -125,13 +125,17 @@ nav {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: opacity var(--transition), transform var(--transition);
+    transition: all 0.2s ease;
     flex-shrink: 0;
     font-family: var(--font);
+    position: relative;
+    animation: btnPulse 2.5s ease-in-out infinite;
 }
 
 .btn-run:hover {
-    opacity: 0.85;
+    animation: none;
+    transform: scale(1.03);
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
 }
 
 .btn-run:active {
@@ -139,15 +143,30 @@ nav {
 }
 
 .btn-run.running {
-    opacity: 0.6;
+    animation: none;
+    opacity: 0.7;
     pointer-events: none;
 }
 
-.btn-run.running svg {
-    animation: spin 1s linear infinite;
+.btn-radar {
+    display: flex;
+    align-items: center;
 }
 
-@keyframes spin { 100% { transform: rotate(360deg); } }
+.btn-radar svg {
+    animation: radarPulse 2s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(23, 23, 23, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(23, 23, 23, 0); }
+}
+
+@keyframes radarPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
 
 /* ============================================================
    Hero
