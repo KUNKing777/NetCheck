@@ -2,20 +2,26 @@
 
 # NetCheck
 
-**网络诊断工具 · Network Diagnostics Tool**
-
 [![Demo](https://img.shields.io/badge/Demo-Live-0070f3?style=for-the-badge&logo=githubpages&logoColor=white)](https://kunking777.github.io/NetCheck/)
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![Pure Static](https://img.shields.io/badge/Pure%20Static-HTML%2FCSS%2FJS-64748b?style=for-the-badge&logo=html5&logoColor=white)]()
 
+**网络诊断工具 · Network Diagnostics Tool**
+
 纯静态实现，无需后端，打开即用。
 Pure static — no backend, no build tools, just open and use.
+
+[中文](#中文) | [English](#english)
 
 </div>
 
 ---
 
-## Features
+<a id="中文"></a>
+
+## 中文
+
+### 功能
 
 | 功能 | 说明 |
 |------|------|
@@ -29,7 +35,57 @@ Pure static — no backend, no build tools, just open and use.
 | **浏览器指纹** | Canvas、WebGL、Audio、UA 等多维指纹分析 |
 | **中英切换** | 一键切换中文/英文界面，记忆用户偏好 |
 
-## Services Tested
+### 测试的服务
+
+| 国际服务 | 国内服务 |
+|----------|----------|
+| Google   | 百度     |
+| ChatGPT  | 哔哩哔哩 |
+| OpenAI   | 知乎     |
+| Claude   | 微博     |
+| GitHub   | 抖音     |
+| YouTube  | 腾讯     |
+| Twitter  |          |
+| Wikipedia|          |
+| Cloudflare|         |
+| DeepSeek |          |
+
+### 技术栈
+
+- **前端** — 纯 HTML / CSS / JavaScript，无框架、无构建工具
+- **设计** — Vercel Design System（Geist 字体、shadow-as-border）
+- **API** — ipapi.co、ipinfo.io、dns.google、Cloudflare Trace
+- **浏览器 API** — fetch、Network Information API、RTCPeerConnection、Canvas/WebGL/Audio
+
+### 使用方法
+
+```bash
+git clone https://github.com/KUNKing777/NetCheck.git
+cd NetCheck
+open index.html
+```
+
+---
+
+<a id="english"></a>
+
+## English
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **IP Detection** | IP address, location, ISP, ASN, timezone, IPv6 |
+| **Network Environment** | Connection type, downlink speed, RTT, data saver |
+| **Latency Test** | Ping 16 services with progress bar and distribution |
+| **Connectivity** | One-click check if Google, ChatGPT, Claude are reachable |
+| **DNS Resolution** | Resolve 10 domains via Google DNS API, measure speed |
+| **WebRTC Leak** | Detect real IP leaking via WebRTC protocol |
+| **DNS Leak** | Detect DNS exposure via Cloudflare Trace |
+| **Fingerprint** | Canvas, WebGL, Audio, UA and more fingerprint analysis |
+| **i18n** | One-click Chinese/English toggle, remembers preference |
+
+### Services Tested
 
 | International | Domestic |
 |---------------|----------|
@@ -44,37 +100,22 @@ Pure static — no backend, no build tools, just open and use.
 | Cloudflare    |          |
 | DeepSeek      |          |
 
-## Tech Stack
+### Tech Stack
 
-- **Frontend** — Pure HTML / CSS / JavaScript
+- **Frontend** — Pure HTML / CSS / JavaScript, no frameworks, no build tools
 - **Design** — Vercel Design System (Geist font, shadow-as-border)
 - **APIs** — ipapi.co, ipinfo.io, dns.google, Cloudflare Trace
 - **Browser APIs** — fetch, Network Information API, RTCPeerConnection, Canvas/WebGL/Audio
 
-## Project Structure
-
-```
-NetCheck/
-├── index.html      # Page structure
-├── style.css       # Vercel-inspired styles
-├── app.js          # All logic (IP, latency, DNS, leak, fingerprint, i18n)
-└── README.md
-```
-
-## Usage
+### Usage
 
 ```bash
-# Clone
 git clone https://github.com/KUNKing777/NetCheck.git
 cd NetCheck
-
-# Open directly
 open index.html
-
-# Or use any static server
-npx serve .
-python3 -m http.server 8080
 ```
+
+---
 
 ## License
 
