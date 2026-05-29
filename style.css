@@ -236,6 +236,27 @@ html.dark .btn-dark .fa-moon::before {
     content: '\f185';
 }
 
+.btn-github {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-github:hover {
+    color: var(--text);
+    border-color: var(--text);
+}
+
 .btn-lang {
     background: transparent;
     color: var(--text-muted);
