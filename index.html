@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetCheck - Network Diagnostics</title>
+    <title>NetCheck — Network Diagnostics</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Header -->
     <header>
         <div class="container header-inner">
-            <div class="logo">
-                <i class="fas fa-network-wired"></i>
+            <a class="logo" href="#">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 <span>NetCheck</span>
-            </div>
+            </a>
             <nav>
-                <a href="#home" class="nav-link active" data-section="home">Home</a>
-                <a href="#ip" class="nav-link" data-section="ip">IP Info</a>
-                <a href="#latency" class="nav-link" data-section="latency">Latency</a>
-                <a href="#leak" class="nav-link" data-section="leak">Leak Test</a>
+                <a href="#ip" class="nav-link" data-section="ip">IP 信息</a>
+                <a href="#latency" class="nav-link" data-section="latency">延迟测试</a>
+                <a href="#dns" class="nav-link" data-section="dns">DNS 解析</a>
+                <a href="#leak" class="nav-link" data-section="leak">安全检测</a>
             </nav>
-            <button class="btn-run" onclick="runAllChecks()">
-                <i class="fas fa-play"></i> Run Check
+            <button class="btn-run" id="btnRun" onclick="runAllChecks()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>开始检测</span>
             </button>
         </div>
     </header>
@@ -29,12 +34,22 @@
     <!-- Hero -->
     <section class="hero" id="home">
         <div class="container">
-            <h1>Network Diagnostics Tool</h1>
-            <p>One-click check your IP, network environment, latency, DNS, WebRTC and VPN leak detection.</p>
-            <div class="hero-ip">
-                <span class="hero-ip-label">Your IP</span>
-                <span class="hero-ip-value" id="heroIP">Detecting...</span>
-                <span class="hero-ip-loc" id="heroLoc"></span>
+            <div class="hero-badge">一站式网络诊断工具</div>
+            <h1>检查你的网络环境</h1>
+            <p>一键检测 IP 地址、网络延迟、DNS 解析、WebRTC 泄露、浏览器指纹等全方位网络信息</p>
+            <div class="hero-ip-card">
+                <div class="hero-ip-left">
+                    <span class="hero-ip-label">Your IP Address</span>
+                    <span class="hero-ip-value" id="heroIP">
+                        <span class="skeleton skeleton-ip"></span>
+                    </span>
+                </div>
+                <div class="hero-ip-right">
+                    <span class="hero-ip-loc" id="heroLoc">
+                        <span class="skeleton skeleton-loc"></span>
+                    </span>
+                    <span class="hero-ip-isp" id="heroISP"></span>
+                </div>
             </div>
         </div>
     </section>
@@ -43,100 +58,140 @@
     <section class="features container" id="features">
         <a class="feature-card" href="#ip" data-action="checkIP">
             <div class="feature-icon"><i class="fas fa-globe"></i></div>
-            <h3>IP Info</h3>
-            <p>IP address, location, ISP, ASN, timezone</p>
+            <h3>IP 信息</h3>
+            <p>IP 地址、地理位置、ISP、ASN、时区</p>
         </a>
         <a class="feature-card" href="#ip" data-action="checkEnv">
             <div class="feature-icon"><i class="fas fa-wifi"></i></div>
-            <h3>Network Env</h3>
-            <p>Connection type, downlink, RTT, data saver</p>
+            <h3>网络环境</h3>
+            <p>连接类型、下行速度、RTT、省流模式</p>
         </a>
         <a class="feature-card" href="#latency" data-action="runLatency">
             <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
-            <h3>Latency Test</h3>
-            <p>Ping 16 services: Google, ChatGPT, GitHub, etc.</p>
+            <h3>延迟测试</h3>
+            <p>Ping 16 个服务：Google、ChatGPT、GitHub 等</p>
         </a>
         <a class="feature-card" href="#latency" data-action="runConnectivity">
             <div class="feature-icon"><i class="fas fa-server"></i></div>
-            <h3>Connectivity</h3>
-            <p>Check accessibility of global services</p>
+            <h3>连通性</h3>
+            <p>检测全球服务的可访问性</p>
         </a>
-        <a class="feature-card" href="#latency" data-action="runDNS">
+        <a class="feature-card" href="#dns" data-action="runDNS">
             <div class="feature-icon"><i class="fas fa-search"></i></div>
-            <h3>DNS Resolution</h3>
-            <p>Resolve domains via Google DNS, measure speed</p>
+            <h3>DNS 解析</h3>
+            <p>通过 Google DNS 解析域名，测量速度</p>
         </a>
         <a class="feature-card" href="#leak" data-action="checkWebRTC">
             <div class="feature-icon"><i class="fas fa-video"></i></div>
-            <h3>WebRTC Leak</h3>
-            <p>Detect real IP leaking via WebRTC protocol</p>
+            <h3>WebRTC 泄露</h3>
+            <p>检测 WebRTC 协议导致的真实 IP 泄露</p>
         </a>
         <a class="feature-card" href="#leak" data-action="checkDNSLeak">
             <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-            <h3>DNS Leak</h3>
-            <p>Check if DNS queries are exposed outside VPN</p>
+            <h3>DNS 泄露</h3>
+            <p>检查 DNS 查询是否在 VPN 外暴露</p>
         </a>
         <a class="feature-card" href="#leak" data-action="checkFingerprint">
             <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
-            <h3>Fingerprint</h3>
-            <p>Browser & device fingerprint analysis</p>
+            <h3>浏览器指纹</h3>
+            <p>浏览器与设备指纹分析</p>
         </a>
     </section>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container container" id="progressBar" style="display:none">
+        <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">0%</span>
+    </div>
 
     <!-- IP Detail Section -->
     <section class="section container" id="ip">
         <div class="section-header">
-            <h2><i class="fas fa-globe"></i> IP & Network Info</h2>
-            <span class="badge" id="ipBadge">Pending</span>
+            <h2><i class="fas fa-globe"></i> IP & 网络信息</h2>
+            <span class="badge" id="ipBadge">等待中</span>
         </div>
         <div class="detail-grid" id="ipGrid">
-            <div class="detail-item"><label>IP Address</label><span id="dIP" class="mono">--</span></div>
-            <div class="detail-item"><label>Location</label><span id="dLoc">--</span></div>
-            <div class="detail-item"><label>ISP</label><span id="dISP">--</span></div>
-            <div class="detail-item"><label>ASN</label><span id="dASN" class="mono">--</span></div>
-            <div class="detail-item"><label>Country</label><span id="dCountry">--</span></div>
-            <div class="detail-item"><label>Timezone</label><span id="dTZ" class="mono">--</span></div>
-            <div class="detail-item"><label>Connection</label><span id="dConn">--</span></div>
-            <div class="detail-item"><label>Downlink</label><span id="dDown">--</span></div>
-            <div class="detail-item"><label>RTT</label><span id="dRTT">--</span></div>
-            <div class="detail-item"><label>IPv6</label><span id="dIPv6" class="mono">--</span></div>
-            <div class="detail-item"><label>Data Saver</label><span id="dSaver">--</span></div>
-            <div class="detail-item"><label>Online</label><span id="dOnline">--</span></div>
+            <div class="detail-item"><label>IP 地址</label><span id="dIP" class="mono skeleton-text">--</span></div>
+            <div class="detail-item"><label>位置</label><span id="dLoc" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>ISP</label><span id="dISP" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>ASN</label><span id="dASN" class="mono skeleton-text">--</span></div>
+            <div class="detail-item"><label>国家</label><span id="dCountry" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>时区</label><span id="dTZ" class="mono skeleton-text">--</span></div>
+            <div class="detail-item"><label>连接类型</label><span id="dConn" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>下行速度</label><span id="dDown" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>RTT</label><span id="dRTT" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>IPv6</label><span id="dIPv6" class="mono skeleton-text">--</span></div>
+            <div class="detail-item"><label>省流模式</label><span id="dSaver" class="skeleton-text">--</span></div>
+            <div class="detail-item"><label>在线状态</label><span id="dOnline" class="skeleton-text">--</span></div>
         </div>
     </section>
 
     <!-- Latency Section -->
     <section class="section container" id="latency">
         <div class="section-header">
-            <h2><i class="fas fa-tachometer-alt"></i> Latency & Connectivity</h2>
-            <span class="badge" id="latBadge">Pending</span>
+            <h2><i class="fas fa-tachometer-alt"></i> 延迟 & 连通性</h2>
+            <span class="badge" id="latBadge">等待中</span>
         </div>
-        <div class="latency-table" id="latencyTable"></div>
+        <div class="latency-table" id="latencyTable">
+            <div class="latency-empty">点击"开始检测"或上方卡片开始测试</div>
+        </div>
+    </section>
+
+    <!-- DNS Section -->
+    <section class="section container" id="dns">
+        <div class="section-header">
+            <h2><i class="fas fa-search"></i> DNS 解析</h2>
+            <span class="badge" id="dnsBadge">等待中</span>
+        </div>
+        <div class="dns-table" id="dnsTable">
+            <div class="latency-empty">点击"开始检测"或上方卡片开始测试</div>
+        </div>
     </section>
 
     <!-- Leak Test Section -->
     <section class="section container" id="leak">
         <div class="section-header">
-            <h2><i class="fas fa-shield-alt"></i> Leak & Security Tests</h2>
-            <span class="badge" id="leakBadge">Pending</span>
+            <h2><i class="fas fa-shield-alt"></i> 安全 & 泄露检测</h2>
+            <span class="badge" id="leakBadge">等待中</span>
         </div>
-        <div class="leak-grid" id="leakGrid"></div>
+        <div class="leak-grid" id="leakGrid">
+            <div class="leak-item">
+                <i class="fas fa-video"></i>
+                <h4>WebRTC 泄露</h4>
+                <div class="result pending">等待检测</div>
+            </div>
+            <div class="leak-item">
+                <i class="fas fa-shield-alt"></i>
+                <h4>DNS 泄露</h4>
+                <div class="result pending">等待检测</div>
+            </div>
+            <div class="leak-item">
+                <i class="fas fa-fingerprint"></i>
+                <h4>浏览器指纹</h4>
+                <div class="result pending">等待检测</div>
+            </div>
+        </div>
         <div class="fingerprint-table" id="fpTable"></div>
     </section>
 
     <!-- Summary -->
     <section class="section container" id="summary">
         <div class="section-header">
-            <h2><i class="fas fa-clipboard-check"></i> Summary</h2>
+            <h2><i class="fas fa-clipboard-check"></i> 检测摘要</h2>
         </div>
         <div class="summary-box" id="summaryBox">
-            <p class="text-muted">Click "Run Check" to start...</p>
+            <div class="summary-empty">
+                <i class="fas fa-mouse-pointer"></i>
+                <p>点击"开始检测"运行全面网络诊断</p>
+            </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>NetCheck &mdash; Pure static network diagnostics tool</p>
+            <p>NetCheck — 纯静态网络诊断工具 · 数据不会上传至任何服务器</p>
         </div>
     </footer>
 

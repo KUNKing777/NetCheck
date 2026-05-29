@@ -1,5 +1,6 @@
 // ============================================================
 // NetCheck - Network Diagnostics Tool
+// Vercel Design System Edition
 // ============================================================
 
 const SERVICES = [
@@ -27,6 +28,36 @@ const DNS_TARGETS = [
     'deepseek.com', 'wikipedia.org',
 ];
 
+// Progress tracking
+let totalSteps = 0;
+let currentStep = 0;
+
+function initProgress(total) {
+    totalSteps = total;
+    currentStep = 0;
+    const bar = document.getElementById('progressBar');
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    bar.style.display = 'flex';
+    fill.style.width = '0%';
+    text.textContent = '0%';
+}
+
+function updateProgress(step) {
+    currentStep = step;
+    const pct = Math.round((currentStep / totalSteps) * 100);
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    fill.style.width = pct + '%';
+    text.textContent = pct + '%';
+}
+
+function hideProgress() {
+    setTimeout(() => {
+        document.getElementById('progressBar').style.display = 'none';
+    }, 600);
+}
+
 // ============================================================
 // IP Detection
 // ============================================================
@@ -44,31 +75,49 @@ async function checkIP() {
         if (!data) {
             try {
                 const r = await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) { const d = await r.json(); data = { ip: d.ip, city: d.city, region: d.region, country_name: d.country, org: d.org, timezone: d.timezone, asn: d.org?.split(' ')[0] || '--' }; }
+                if (r.ok) {
+                    const d = await r.json();
+                    data = {
+                        ip: d.ip, city: d.city, region: d.region,
+                        country_name: d.country, org: d.org,
+                        timezone: d.timezone, asn: d.org?.split(' ')[0] || '--'
+                    };
+                }
             } catch {}
         }
         // ip-api.com
         if (!data) {
             try {
                 const r = await fetch('https://ip-api.com/json/?fields=66846719', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) { const d = await r.json(); data = { ip: d.query, city: d.city, region: d.regionName, country_name: d.country, org: d.isp, asn: d.as, timezone: d.timezone }; }
+                if (r.ok) {
+                    const d = await r.json();
+                    data = {
+                        ip: d.query, city: d.city, region: d.regionName,
+                        country_name: d.country, org: d.isp,
+                        asn: d.as, timezone: d.timezone
+                    };
+                }
             } catch {}
         }
 
         if (data) {
             document.getElementById('heroIP').textContent = data.ip || '--';
+            document.getElementById('heroIP').classList.remove('skeleton');
             document.getElementById('heroLoc').textContent = [data.city, data.country_name].filter(Boolean).join(', ');
+            document.getElementById('heroLoc').classList.remove('skeleton');
+            if (data.org) document.getElementById('heroISP').textContent = data.org;
             document.getElementById('dIP').textContent = data.ip || '--';
             document.getElementById('dLoc').textContent = [data.city, data.region, data.country_name].filter(Boolean).join(', ') || '--';
             document.getElementById('dISP').textContent = data.org || '--';
             document.getElementById('dASN').textContent = data.asn || data.as || '--';
             document.getElementById('dCountry').textContent = data.country_name || '--';
             document.getElementById('dTZ').textContent = data.timezone || '--';
-            setBadge('ipBadge', 'done', 'OK');
+            setBadge('ipBadge', 'done', '完成');
         } else { throw new Error('fail'); }
     } catch {
-        document.getElementById('heroIP').textContent = 'Failed';
-        setBadge('ipBadge', 'fail', 'Error');
+        document.getElementById('heroIP').textContent = '检测失败';
+        document.getElementById('heroIP').classList.remove('skeleton');
+        setBadge('ipBadge', 'fail', '错误');
     }
 }
 
@@ -82,17 +131,15 @@ function checkEnv() {
         setText('dConn', conn.effectiveType || conn.type || 'N/A');
         setText('dDown', conn.downlink ? `${conn.downlink} Mbps` : 'N/A');
         setText('dRTT', conn.rtt ? `${conn.rtt} ms` : 'N/A');
-        setText('dSaver', conn.saveData ? 'Enabled' : 'Disabled');
+        setText('dSaver', conn.saveData ? '已开启' : '已关闭');
     } else {
-        setText('dConn', 'Not supported');
+        setText('dConn', '不支持');
         setText('dDown', 'N/A');
         setText('dRTT', 'N/A');
         setText('dSaver', 'N/A');
     }
-    setText('dOnline', navigator.onLine ? 'Online' : 'Offline');
+    setText('dOnline', navigator.onLine ? '在线' : '离线');
     document.getElementById('dOnline').style.color = navigator.onLine ? 'var(--green)' : 'var(--red)';
-
-    // IPv6 check
     checkIPv6();
 }
 
@@ -101,10 +148,10 @@ async function checkIPv6() {
         const r = await fetch('https://api64.ipify.org?format=json', { signal: AbortSignal.timeout(5000) });
         const d = await r.json();
         const isV6 = d.ip?.includes(':');
-        setText('dIPv6', isV6 ? `Yes (${d.ip})` : 'No (IPv4 only)');
+        setText('dIPv6', isV6 ? `是 (${d.ip})` : '否 (仅 IPv4)');
         document.getElementById('dIPv6').style.color = isV6 ? 'var(--green)' : 'var(--text-muted)';
     } catch {
-        setText('dIPv6', 'Check failed');
+        setText('dIPv6', '检测失败');
     }
 }
 
@@ -129,7 +176,7 @@ async function runLatency() {
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         table.innerHTML += `
             <div class="lat-row" id="lat-${id}">
-                <div class="lat-icon" style="background:${s.color}15;color:${s.color}"><i class="${s.icon}"></i></div>
+                <div class="lat-icon" style="background:${s.color}12;color:${s.color}"><i class="${s.icon}"></i></div>
                 <div class="lat-name">${s.name}</div>
                 <div class="lat-bar-wrap"><div class="lat-bar fast" style="width:0%"></div></div>
                 <div class="lat-value text-muted">...</div>
@@ -138,7 +185,8 @@ async function runLatency() {
     });
 
     let ok = 0;
-    for (const s of SERVICES) {
+    for (let i = 0; i < SERVICES.length; i++) {
+        const s = SERVICES[i];
         const id = s.name.replace(/[^a-zA-Z]/g, '');
         const el = document.getElementById(`lat-${id}`);
         if (!el) continue;
@@ -148,7 +196,7 @@ async function runLatency() {
 
         const ms = await ping(s.url);
         if (ms === -1) {
-            val.textContent = 'Timeout'; val.className = 'lat-value timeout';
+            val.textContent = '超时'; val.className = 'lat-value timeout';
             bar.style.width = '100%'; bar.className = 'lat-bar timeout';
             st.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
         } else {
@@ -171,19 +219,52 @@ async function runLatency() {
 // ============================================================
 
 async function runDNS() {
+    setBadge('dnsBadge', 'running');
+    const table = document.getElementById('dnsTable');
+    table.innerHTML = '';
+
+    DNS_TARGETS.forEach(d => {
+        table.innerHTML += `
+            <div class="dns-row" id="dns-${d.replace(/\./g, '-')}">
+                <div class="dns-domain">${d}</div>
+                <div class="dns-ips text-muted">...</div>
+                <div class="dns-time text-muted">...</div>
+                <div class="dns-status"></div>
+            </div>`;
+    });
+
     const results = [];
     for (const d of DNS_TARGETS) {
+        const row = document.getElementById(`dns-${d.replace(/\./g, '-')}`);
+        const ipsEl = row.querySelector('.dns-ips');
+        const timeEl = row.querySelector('.dns-time');
+        const stEl = row.querySelector('.dns-status');
+
         const start = performance.now();
         try {
             const r = await fetch(`https://dns.google/resolve?name=${d}&type=A`, { signal: AbortSignal.timeout(5000) });
             const data = await r.json();
             const ms = Math.round(performance.now() - start);
-            const ips = data.Answer?.map(a => a.data).join(', ') || 'No record';
+            const ips = data.Answer?.map(a => a.data).join(', ') || '无记录';
+            ipsEl.textContent = ips;
+            ipsEl.classList.remove('text-muted');
+            timeEl.textContent = `${ms} ms`;
+            timeEl.className = ms < 200 ? 'dns-time fast' : ms < 500 ? 'dns-time medium' : 'dns-time slow';
+            timeEl.style.color = ms < 200 ? 'var(--green)' : ms < 500 ? 'var(--yellow)' : 'var(--orange)';
+            stEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
             results.push({ domain: d, ok: true, ips, ms });
         } catch {
+            ipsEl.textContent = '解析失败';
+            ipsEl.classList.remove('text-muted');
+            ipsEl.style.color = 'var(--red)';
+            timeEl.textContent = '--';
+            stEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
             results.push({ domain: d, ok: false, ips: 'Failed', ms: -1 });
         }
     }
+
+    const dnsOk = results.filter(r => r.ok).length;
+    setBadge('dnsBadge', 'done', `${dnsOk}/${DNS_TARGETS.length}`);
     return results;
 }
 
@@ -205,20 +286,18 @@ async function checkWebRTC() {
                     const hasPrivate = list.some(ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.)/.test(ip));
                     const hasV6 = list.some(ip => ip.includes(':'));
                     resolve({
-                        ips: list,
-                        hasPrivate,
-                        hasV6,
+                        ips: list, hasPrivate, hasV6,
                         safe: list.length <= 1,
-                        detail: list.length ? list.join(', ') : 'No local IPs detected'
+                        detail: list.length ? list.join(', ') : '未检测到本地 IP'
                     });
                     return;
                 }
                 const match = e.candidate.candidate.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([a-f0-9:]+)/gi);
                 if (match) match.forEach(ip => ips.add(ip));
             };
-            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: 'Timeout - no leak detected' }); }, 5000);
+            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: '超时 - 未检测到泄露' }); }, 5000);
         } catch {
-            resolve({ ips: [], safe: true, detail: 'WebRTC not supported' });
+            resolve({ ips: [], safe: true, detail: 'WebRTC 不支持' });
         }
     });
 }
@@ -241,10 +320,10 @@ async function checkDNSLeak() {
             location: data.loc || '--',
             warp: data.warp || '--',
             safe: data.warp === 'off' || !data.warp,
-            detail: `Cloudflare sees: ${data.ip} (${data.loc}) | WARP: ${data.warp || 'N/A'}`
+            detail: `Cloudflare 识别: ${data.ip} (${data.loc}) | WARP: ${data.warp || 'N/A'}`
         };
     } catch {
-        return { ip: '--', safe: true, detail: 'Cloudflare trace unavailable' };
+        return { ip: '--', safe: true, detail: 'Cloudflare trace 不可用' };
     }
 }
 
@@ -261,10 +340,10 @@ function checkFingerprint() {
     fp['Screen'] = `${screen.width}x${screen.height} @ ${window.devicePixelRatio}x`;
     fp['Color Depth'] = `${screen.colorDepth}-bit`;
     fp['Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone || '--';
-    fp['Touch Support'] = navigator.maxTouchPoints > 0 ? `Yes (${navigator.maxTouchPoints} points)` : 'No';
-    fp['Cookies'] = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
-    fp['Do Not Track'] = navigator.doNotTrack || 'Not set';
-    fp['Hardware Concurrency'] = `${navigator.hardwareConcurrency || '?'} cores`;
+    fp['Touch Support'] = navigator.maxTouchPoints > 0 ? `是 (${navigator.maxTouchPoints} 点)` : '否';
+    fp['Cookies'] = navigator.cookieEnabled ? '已启用' : '已禁用';
+    fp['Do Not Track'] = navigator.doNotTrack || '未设置';
+    fp['Hardware Concurrency'] = `${navigator.hardwareConcurrency || '?'} 核`;
     fp['Device Memory'] = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'N/A';
     fp['WebGL Vendor'] = getWebGLInfo().vendor;
     fp['WebGL Renderer'] = getWebGLInfo().renderer;
@@ -329,12 +408,19 @@ function getAudioFingerprint() {
 // UI Helpers
 // ============================================================
 
-function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.textContent = text;
+        el.classList.remove('skeleton-text');
+    }
+}
+
 function setBadge(id, state, text) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.className = 'badge' + (state === 'done' ? ' done' : state === 'fail' ? ' fail' : '');
-    el.textContent = text || (state === 'running' ? 'Running...' : 'Pending');
+    el.className = 'badge' + (state === 'done' ? ' done' : state === 'fail' ? ' fail' : state === 'running' ? ' running' : '');
+    el.textContent = text || (state === 'running' ? '检测中...' : '等待中');
 }
 
 // ============================================================
@@ -342,26 +428,29 @@ function setBadge(id, state, text) {
 // ============================================================
 
 async function runAllChecks() {
-    const btn = document.querySelector('.btn-run');
-    btn.classList.add('running'); btn.disabled = true;
-    document.getElementById('summaryBox').innerHTML = '<p class="text-muted">Running diagnostics...</p>';
+    const btn = document.getElementById('btnRun');
+    btn.classList.add('running');
+    btn.disabled = true;
+    document.getElementById('summaryBox').innerHTML = '<div class="summary-empty"><i class="fas fa-spinner fa-spin"></i><p>正在运行全面诊断...</p></div>';
 
-    await checkIP();
-    checkEnv();
-    const latResult = await runLatency();
-    const dnsResults = await runDNS();
-    const webrtc = await checkWebRTC();
-    const dnsLeak = await checkDNSLeak();
-    const fp = checkFingerprint();
+    // Progress: 7 major steps
+    initProgress(7);
 
-    // Render leak section
+    await checkIP();        updateProgress(1);
+    checkEnv();             updateProgress(2);
+    const latResult = await runLatency();   updateProgress(3);
+    const dnsResults = await runDNS();      updateProgress(4);
+    const webrtc = await checkWebRTC();     updateProgress(5);
+    const dnsLeak = await checkDNSLeak();   updateProgress(6);
+    const fp = checkFingerprint();          updateProgress(7);
+
     renderLeak(webrtc, dnsLeak, fp);
-    setBadge('leakBadge', 'done', 'Done');
-
-    // Summary
+    setBadge('leakBadge', 'done', '完成');
     generateSummary(latResult, dnsResults, webrtc, dnsLeak);
 
-    btn.classList.remove('running'); btn.disabled = false;
+    hideProgress();
+    btn.classList.remove('running');
+    btn.disabled = false;
 }
 
 function renderLeak(webrtc, dnsLeak, fp) {
@@ -369,21 +458,21 @@ function renderLeak(webrtc, dnsLeak, fp) {
     grid.innerHTML = `
         <div class="leak-item">
             <i class="fas fa-video" style="color:${webrtc.safe ? 'var(--green)' : 'var(--red)'}"></i>
-            <h4>WebRTC Leak</h4>
-            <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? 'No Leak' : 'Leaked'}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:6px">${webrtc.detail}</p>
+            <h4>WebRTC 泄露</h4>
+            <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? '无泄露' : '已泄露'}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${webrtc.detail}</p>
         </div>
         <div class="leak-item">
             <i class="fas fa-shield-alt" style="color:${dnsLeak.safe ? 'var(--green)' : 'var(--yellow)'}"></i>
-            <h4>DNS Leak</h4>
-            <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? 'Safe' : 'Check'}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:6px">${dnsLeak.detail}</p>
+            <h4>DNS 泄露</h4>
+            <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? '安全' : '注意'}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${dnsLeak.detail}</p>
         </div>
         <div class="leak-item">
             <i class="fas fa-fingerprint" style="color:var(--purple)"></i>
-            <h4>Fingerprint</h4>
+            <h4>浏览器指纹</h4>
             <div class="result pending">${fp['Canvas Hash']}</div>
-            <p class="text-muted" style="font-size:12px;margin-top:6px">${fp['WebGL Renderer']}</p>
+            <p class="text-muted" style="font-size:12px;margin-top:8px">${fp['WebGL Renderer']}</p>
         </div>`;
 
     const fpTable = document.getElementById('fpTable');
@@ -403,46 +492,89 @@ function generateSummary(latResult, dnsResults, webrtc, dnsLeak) {
     if (latResult) {
         const pct = Math.round((latResult.ok / latResult.total) * 100);
         const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
-        rows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> Connectivity: <strong>${latResult.ok}/${latResult.total}</strong> services reachable (${pct}%)</div>`);
+        rows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> 连通性: <strong>${latResult.ok}/${latResult.total}</strong> 个服务可达 (${pct}%)</div>`);
     }
 
     if (dnsResults) {
         const dnsOk = dnsResults.filter(r => r.ok).length;
-        rows.push(`<div class="summary-row"><i class="fas fa-search text-green"></i> DNS: <strong>${dnsOk}/${dnsResults.length}</strong> domains resolved</div>`);
+        rows.push(`<div class="summary-row"><i class="fas fa-search text-green"></i> DNS: <strong>${dnsOk}/${dnsResults.length}</strong> 个域名解析成功</div>`);
     }
 
-    rows.push(`<div class="summary-row"><i class="fas fa-video ${webrtc.safe ? 'text-green' : 'text-red'}"></i> WebRTC: ${webrtc.safe ? 'No leak detected' : 'IP may be leaked'}</div>`);
-    rows.push(`<div class="summary-row"><i class="fas fa-shield-alt ${dnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> DNS: ${dnsLeak.safe ? 'No leak detected' : 'Potential leak'}</div>`);
+    rows.push(`<div class="summary-row"><i class="fas fa-video ${webrtc.safe ? 'text-green' : 'text-red'}"></i> WebRTC: ${webrtc.safe ? '未检测到泄露' : 'IP 可能已泄露'}</div>`);
+    rows.push(`<div class="summary-row"><i class="fas fa-shield-alt ${dnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> DNS: ${dnsLeak.safe ? '未检测到泄露' : '存在潜在泄露'}</div>`);
 
     // Domestic vs International
     const domestic = ['Baidu', 'Bilibili', 'Zhihu', 'Weibo', 'Douyin', 'Tencent'];
     const intl = ['Google', 'ChatGPT', 'OpenAI API', 'Claude', 'YouTube', 'Twitter/X'];
     let domOk = 0, intOk = 0;
-    domestic.forEach(n => { const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`); if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) domOk++; });
-    intl.forEach(n => { const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`); if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) intOk++; });
-    rows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> Domestic: <strong>${domOk}/${domestic.length}</strong> | International: <strong>${intOk}/${intl.length}</strong></div>`);
+    domestic.forEach(n => {
+        const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`);
+        if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) domOk++;
+    });
+    intl.forEach(n => {
+        const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`);
+        if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) intOk++;
+    });
+    rows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> 国内: <strong>${domOk}/${domestic.length}</strong> | 国际: <strong>${intOk}/${intl.length}</strong></div>`);
 
     el.innerHTML = rows.join('');
 }
 
 // ============================================================
-// Feature card click
+// Feature card click & nav
 // ============================================================
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Feature cards: scroll to section + run action
     document.querySelectorAll('.feature-card').forEach(card => {
         card.addEventListener('click', e => {
             const action = card.dataset.action;
-            if (action) { e.preventDefault(); window[action](); }
+            const href = card.getAttribute('href');
+            if (action) {
+                e.preventDefault();
+                // Scroll to section first
+                if (href && href !== '#') {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                    }
+                }
+                // Run action
+                window[action]();
+            }
         });
     });
+
     // Smooth scroll for nav
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
             const target = document.querySelector(link.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         });
     });
+
+    // Scroll spy for nav
+    const sections = ['ip', 'latency', 'dns', 'leak'];
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                document.querySelectorAll('.nav-link').forEach(l => {
+                    l.classList.toggle('active', l.dataset.section === id);
+                });
+            }
+        });
+    }, { threshold: 0.3 });
+
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    });
+
+    // Auto-detect IP on load
+    checkIP();
+    checkEnv();
 });
