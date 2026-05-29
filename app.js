@@ -1,36 +1,30 @@
 // ============================================================
 // NetCheck - Network Diagnostics Tool
-// Pure static, no backend required
 // ============================================================
 
 const SERVICES = [
-    { name: 'Google',           icon: 'fab fa-google',      color: '#4285f4', url: 'https://www.google.com/favicon.ico' },
-    { name: 'Google APIs',      icon: 'fab fa-google',      color: '#34a853', url: 'https://www.googleapis.com/' },
-    { name: 'ChatGPT',          icon: 'fas fa-robot',       color: '#10a37f', url: 'https://chatgpt.com/' },
-    { name: 'OpenAI API',       icon: 'fas fa-brain',       color: '#412991', url: 'https://api.openai.com/' },
-    { name: 'Claude',           icon: 'fas fa-microchip',   color: '#d97706', url: 'https://claude.ai/' },
-    { name: 'GitHub',           icon: 'fab fa-github',      color: '#8b5cf6', url: 'https://github.com/favicon.ico' },
-    { name: 'YouTube',          icon: 'fab fa-youtube',      color: '#ff0000', url: 'https://www.youtube.com/favicon.ico' },
-    { name: 'Twitter / X',      icon: 'fab fa-x-twitter',   color: '#ffffff', url: 'https://x.com/favicon.ico' },
-    { name: 'Wikipedia',        icon: 'fab fa-wikipedia-w',  color: '#636466', url: 'https://www.wikipedia.org/' },
-    { name: 'Cloudflare',       icon: 'fas fa-cloud',       color: '#f38020', url: 'https://www.cloudflare.com/favicon.ico' },
-    { name: 'Baidu',            icon: 'fas fa-search',      color: '#2932e1', url: 'https://www.baidu.com/favicon.ico' },
-    { name: 'Bilibili',         icon: 'fas fa-tv',          color: '#fb7299', url: 'https://www.bilibili.com/favicon.ico' },
-    { name: 'Zhihu',            icon: 'fas fa-comments',    color: '#0066ff', url: 'https://www.zhihu.com/favicon.ico' },
-    { name: 'Weibo',            icon: 'fas fa-fire',        color: '#e6162d', url: 'https://www.weibo.com/favicon.ico' },
-    { name: 'Douyin',           icon: 'fas fa-music',       color: '#000000', url: 'https://www.douyin.com/favicon.ico' },
-    { name: 'Tencent',          icon: 'fas fa-message',     color: '#12b7f5', url: 'https://www.tencent.com/favicon.ico' },
+    { name: 'Google',       icon: 'fab fa-google',      color: '#4285f4', url: 'https://www.google.com/favicon.ico' },
+    { name: 'ChatGPT',      icon: 'fas fa-robot',       color: '#10a37f', url: 'https://chatgpt.com/' },
+    { name: 'OpenAI API',   icon: 'fas fa-brain',       color: '#412991', url: 'https://api.openai.com/' },
+    { name: 'Claude',       icon: 'fas fa-microchip',   color: '#d97706', url: 'https://claude.ai/' },
+    { name: 'GitHub',       icon: 'fab fa-github',      color: '#6e40c9', url: 'https://github.com/favicon.ico' },
+    { name: 'YouTube',      icon: 'fab fa-youtube',     color: '#ff0000', url: 'https://www.youtube.com/favicon.ico' },
+    { name: 'Twitter/X',    icon: 'fab fa-x-twitter',   color: '#000',    url: 'https://x.com/favicon.ico' },
+    { name: 'Wikipedia',    icon: 'fab fa-wikipedia-w', color: '#636466', url: 'https://www.wikipedia.org/' },
+    { name: 'Cloudflare',   icon: 'fas fa-cloud',       color: '#f38020', url: 'https://www.cloudflare.com/favicon.ico' },
+    { name: 'Baidu',        icon: 'fas fa-search',      color: '#2932e1', url: 'https://www.baidu.com/favicon.ico' },
+    { name: 'Bilibili',     icon: 'fas fa-tv',          color: '#fb7299', url: 'https://www.bilibili.com/favicon.ico' },
+    { name: 'Zhihu',        icon: 'fas fa-comments',    color: '#0066ff', url: 'https://www.zhihu.com/favicon.ico' },
+    { name: 'Weibo',        icon: 'fas fa-fire',        color: '#e6162d', url: 'https://www.weibo.com/favicon.ico' },
+    { name: 'Douyin',       icon: 'fas fa-music',       color: '#000',    url: 'https://www.douyin.com/favicon.ico' },
+    { name: 'Tencent',      icon: 'fas fa-message',     color: '#12b7f5', url: 'https://www.tencent.com/favicon.ico' },
+    { name: 'DeepSeek',     icon: 'fas fa-dragon',      color: '#4d6bfe', url: 'https://www.deepseek.com/favicon.ico' },
 ];
 
 const DNS_TARGETS = [
-    'google.com',
-    'github.com',
-    'chatgpt.com',
-    'claude.ai',
-    'baidu.com',
-    'bilibili.com',
-    'cloudflare.com',
-    'openai.com',
+    'google.com', 'github.com', 'chatgpt.com', 'claude.ai',
+    'openai.com', 'baidu.com', 'bilibili.com', 'cloudflare.com',
+    'deepseek.com', 'wikipedia.org',
 ];
 
 // ============================================================
@@ -38,69 +32,43 @@ const DNS_TARGETS = [
 // ============================================================
 
 async function checkIP() {
-    const statusEl = document.getElementById('ipStatus');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
+    setBadge('ipBadge', 'running');
     try {
-        // Try multiple APIs for reliability
         let data = null;
-
+        // ipapi.co
         try {
             const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
             if (r.ok) data = await r.json();
         } catch {}
-
+        // ipinfo.io
         if (!data) {
             try {
                 const r = await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) {
-                    const d = await r.json();
-                    data = {
-                        ip: d.ip,
-                        city: d.city,
-                        region: d.region,
-                        country_name: d.country,
-                        org: d.org,
-                        timezone: d.timezone,
-                        asn: d.org?.split(' ')[0] || '--',
-                    };
-                }
+                if (r.ok) { const d = await r.json(); data = { ip: d.ip, city: d.city, region: d.region, country_name: d.country, org: d.org, timezone: d.timezone, asn: d.org?.split(' ')[0] || '--' }; }
             } catch {}
         }
-
+        // ip-api.com
         if (!data) {
             try {
                 const r = await fetch('https://ip-api.com/json/?fields=66846719', { signal: AbortSignal.timeout(5000) });
-                if (r.ok) {
-                    const d = await r.json();
-                    data = {
-                        ip: d.query,
-                        city: d.city,
-                        region: d.regionName,
-                        country_name: d.country,
-                        org: d.isp,
-                        asn: d.as,
-                        timezone: d.timezone,
-                    };
-                }
+                if (r.ok) { const d = await r.json(); data = { ip: d.query, city: d.city, region: d.regionName, country_name: d.country, org: d.isp, asn: d.as, timezone: d.timezone }; }
             } catch {}
         }
 
         if (data) {
-            document.getElementById('ipAddress').textContent = data.ip || '--';
-            document.getElementById('ipLocation').textContent =
-                [data.city, data.region, data.country_name].filter(Boolean).join(', ') || '--';
-            document.getElementById('ipISP').textContent = data.org || data.isp || '--';
-            document.getElementById('ipASN').textContent = data.asn || data.as || '--';
-            document.getElementById('ipCountry').textContent = data.country_name || data.country || '--';
-            document.getElementById('ipTimezone').textContent = data.timezone || '--';
-            statusEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
-        } else {
-            throw new Error('All IP APIs failed');
-        }
-    } catch (e) {
-        document.getElementById('ipAddress').textContent = 'Detection failed';
-        statusEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
+            document.getElementById('heroIP').textContent = data.ip || '--';
+            document.getElementById('heroLoc').textContent = [data.city, data.country_name].filter(Boolean).join(', ');
+            document.getElementById('dIP').textContent = data.ip || '--';
+            document.getElementById('dLoc').textContent = [data.city, data.region, data.country_name].filter(Boolean).join(', ') || '--';
+            document.getElementById('dISP').textContent = data.org || '--';
+            document.getElementById('dASN').textContent = data.asn || data.as || '--';
+            document.getElementById('dCountry').textContent = data.country_name || '--';
+            document.getElementById('dTZ').textContent = data.timezone || '--';
+            setBadge('ipBadge', 'done', 'OK');
+        } else { throw new Error('fail'); }
+    } catch {
+        document.getElementById('heroIP').textContent = 'Failed';
+        setBadge('ipBadge', 'fail', 'Error');
     }
 }
 
@@ -108,353 +76,373 @@ async function checkIP() {
 // Network Environment
 // ============================================================
 
-function checkNetworkEnv() {
-    const statusEl = document.getElementById('envStatus');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+function checkEnv() {
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn) {
+        setText('dConn', conn.effectiveType || conn.type || 'N/A');
+        setText('dDown', conn.downlink ? `${conn.downlink} Mbps` : 'N/A');
+        setText('dRTT', conn.rtt ? `${conn.rtt} ms` : 'N/A');
+        setText('dSaver', conn.saveData ? 'Enabled' : 'Disabled');
+    } else {
+        setText('dConn', 'Not supported');
+        setText('dDown', 'N/A');
+        setText('dRTT', 'N/A');
+        setText('dSaver', 'N/A');
+    }
+    setText('dOnline', navigator.onLine ? 'Online' : 'Offline');
+    document.getElementById('dOnline').style.color = navigator.onLine ? 'var(--green)' : 'var(--red)';
 
+    // IPv6 check
+    checkIPv6();
+}
+
+async function checkIPv6() {
     try {
-        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-
-        if (conn) {
-            document.getElementById('connType').textContent = conn.type || 'N/A';
-            document.getElementById('connEffective').textContent = conn.effectiveType || 'N/A';
-            document.getElementById('connDownlink').textContent = conn.downlink ? `${conn.downlink} Mbps` : 'N/A';
-            document.getElementById('connRTT').textContent = conn.rtt ? `${conn.rtt} ms` : 'N/A';
-            document.getElementById('connDataSaver').textContent = conn.saveData ? 'Enabled' : 'Disabled';
-        } else {
-            document.getElementById('connType').textContent = 'Not supported';
-            document.getElementById('connEffective').textContent = 'N/A';
-            document.getElementById('connDownlink').textContent = 'N/A';
-            document.getElementById('connRTT').textContent = 'N/A';
-            document.getElementById('connDataSaver').textContent = 'N/A';
-        }
-
-        document.getElementById('connOnline').textContent = navigator.onLine ? 'Online' : 'Offline';
-        document.getElementById('connOnline').style.color = navigator.onLine ? 'var(--green)' : 'var(--red)';
-
-        statusEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
+        const r = await fetch('https://api64.ipify.org?format=json', { signal: AbortSignal.timeout(5000) });
+        const d = await r.json();
+        const isV6 = d.ip?.includes(':');
+        setText('dIPv6', isV6 ? `Yes (${d.ip})` : 'No (IPv4 only)');
+        document.getElementById('dIPv6').style.color = isV6 ? 'var(--green)' : 'var(--text-muted)';
     } catch {
-        statusEl.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
+        setText('dIPv6', 'Check failed');
     }
 }
 
 // ============================================================
-// Latency Test
+// Latency & Connectivity
 // ============================================================
 
-async function measureLatency(url, timeout = 8000) {
+async function ping(url, timeout = 8000) {
     const start = performance.now();
     try {
-        await fetch(url, {
-            mode: 'no-cors',
-            cache: 'no-store',
-            signal: AbortSignal.timeout(timeout),
-        });
+        await fetch(url, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(timeout) });
         return Math.round(performance.now() - start);
-    } catch {
-        return -1; // timeout or error
-    }
+    } catch { return -1; }
 }
 
-async function runLatencyTest() {
-    const statusEl = document.getElementById('latencyStatus');
-    const listEl = document.getElementById('latencyList');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    listEl.innerHTML = '';
+async function runLatency() {
+    setBadge('latBadge', 'running');
+    const table = document.getElementById('latencyTable');
+    table.innerHTML = '';
 
-    // Build UI first
     SERVICES.forEach(s => {
-        const level = 'fast';
-        listEl.innerHTML += `
-            <div class="latency-item" id="lat-${s.name.replace(/[^a-zA-Z]/g, '')}">
-                <div class="latency-icon" style="background: ${s.color}22; color: ${s.color}">
-                    <i class="${s.icon}"></i>
-                </div>
-                <div class="latency-info">
-                    <div class="latency-name">${s.name}</div>
-                    <div class="latency-url">${s.url}</div>
-                </div>
-                <div class="latency-bar-wrap">
-                    <div class="latency-bar">
-                        <div class="latency-bar-fill fast" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="latency-value text-muted">...</div>
-            </div>
-        `;
+        const id = s.name.replace(/[^a-zA-Z]/g, '');
+        table.innerHTML += `
+            <div class="lat-row" id="lat-${id}">
+                <div class="lat-icon" style="background:${s.color}15;color:${s.color}"><i class="${s.icon}"></i></div>
+                <div class="lat-name">${s.name}</div>
+                <div class="lat-bar-wrap"><div class="lat-bar fast" style="width:0%"></div></div>
+                <div class="lat-value text-muted">...</div>
+                <div class="lat-status"></div>
+            </div>`;
     });
 
-    // Run tests sequentially to avoid network congestion
+    let ok = 0;
     for (const s of SERVICES) {
-        const id = `lat-${s.name.replace(/[^a-zA-Z]/g, '')}`;
-        const el = document.getElementById(id);
+        const id = s.name.replace(/[^a-zA-Z]/g, '');
+        const el = document.getElementById(`lat-${id}`);
         if (!el) continue;
+        const val = el.querySelector('.lat-value');
+        const bar = el.querySelector('.lat-bar');
+        const st = el.querySelector('.lat-status');
 
-        const valueEl = el.querySelector('.latency-value');
-        const barFill = el.querySelector('.latency-bar-fill');
-
-        const latency = await measureLatency(s.url);
-
-        if (latency === -1) {
-            valueEl.textContent = 'Timeout';
-            valueEl.className = 'latency-value timeout';
-            barFill.style.width = '100%';
-            barFill.className = 'latency-bar-fill timeout';
+        const ms = await ping(s.url);
+        if (ms === -1) {
+            val.textContent = 'Timeout'; val.className = 'lat-value timeout';
+            bar.style.width = '100%'; bar.className = 'lat-bar timeout';
+            st.innerHTML = '<i class="fas fa-times-circle text-red"></i>';
         } else {
-            valueEl.textContent = `${latency} ms`;
-            const percent = Math.min(100, (latency / 3000) * 100);
-            barFill.style.width = `${percent}%`;
-
-            if (latency < 300) {
-                valueEl.className = 'latency-value fast';
-                barFill.className = 'latency-bar-fill fast';
-            } else if (latency < 1000) {
-                valueEl.className = 'latency-value medium';
-                barFill.className = 'latency-bar-fill medium';
-            } else {
-                valueEl.className = 'latency-value slow';
-                barFill.className = 'latency-bar-fill slow';
-            }
+            val.textContent = `${ms} ms`;
+            const pct = Math.min(100, (ms / 3000) * 100);
+            bar.style.width = `${pct}%`;
+            if (ms < 300) { val.className = 'lat-value fast'; bar.className = 'lat-bar fast'; }
+            else if (ms < 1000) { val.className = 'lat-value medium'; bar.className = 'lat-bar medium'; }
+            else { val.className = 'lat-value slow'; bar.className = 'lat-bar slow'; }
+            st.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
+            ok++;
         }
     }
-
-    statusEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
+    setBadge('latBadge', 'done', `${ok}/${SERVICES.length}`);
+    return { ok, total: SERVICES.length };
 }
 
 // ============================================================
-// Connectivity Test
+// DNS Resolution
 // ============================================================
 
-async function testConnectivity(url, timeout = 6000) {
-    const start = performance.now();
+async function runDNS() {
+    const results = [];
+    for (const d of DNS_TARGETS) {
+        const start = performance.now();
+        try {
+            const r = await fetch(`https://dns.google/resolve?name=${d}&type=A`, { signal: AbortSignal.timeout(5000) });
+            const data = await r.json();
+            const ms = Math.round(performance.now() - start);
+            const ips = data.Answer?.map(a => a.data).join(', ') || 'No record';
+            results.push({ domain: d, ok: true, ips, ms });
+        } catch {
+            results.push({ domain: d, ok: false, ips: 'Failed', ms: -1 });
+        }
+    }
+    return results;
+}
+
+// ============================================================
+// WebRTC Leak Detection
+// ============================================================
+
+async function checkWebRTC() {
+    return new Promise(resolve => {
+        const ips = new Set();
+        try {
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            pc.createDataChannel('');
+            pc.createOffer().then(offer => pc.setLocalDescription(offer));
+            pc.onicecandidate = e => {
+                if (!e.candidate) {
+                    pc.close();
+                    const list = [...ips];
+                    const hasPrivate = list.some(ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.)/.test(ip));
+                    const hasV6 = list.some(ip => ip.includes(':'));
+                    resolve({
+                        ips: list,
+                        hasPrivate,
+                        hasV6,
+                        safe: list.length <= 1,
+                        detail: list.length ? list.join(', ') : 'No local IPs detected'
+                    });
+                    return;
+                }
+                const match = e.candidate.candidate.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([a-f0-9:]+)/gi);
+                if (match) match.forEach(ip => ips.add(ip));
+            };
+            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: 'Timeout - no leak detected' }); }, 5000);
+        } catch {
+            resolve({ ips: [], safe: true, detail: 'WebRTC not supported' });
+        }
+    });
+}
+
+// ============================================================
+// DNS Leak Test
+// ============================================================
+
+async function checkDNSLeak() {
     try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), timeout);
-        await fetch(url, {
-            mode: 'no-cors',
-            cache: 'no-store',
-            signal: controller.signal,
+        const r = await fetch('https://www.cloudflare.com/cdn-cgi/trace', { signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const data = {};
+        text.split('\n').forEach(line => {
+            const [k, v] = line.split('=');
+            if (k && v) data[k.trim()] = v.trim();
         });
-        clearTimeout(timer);
-        return { ok: true, time: Math.round(performance.now() - start) };
+        return {
+            ip: data.ip || '--',
+            location: data.loc || '--',
+            warp: data.warp || '--',
+            safe: data.warp === 'off' || !data.warp,
+            detail: `Cloudflare sees: ${data.ip} (${data.loc}) | WARP: ${data.warp || 'N/A'}`
+        };
     } catch {
-        return { ok: false, time: -1 };
+        return { ip: '--', safe: true, detail: 'Cloudflare trace unavailable' };
     }
 }
 
-async function runConnectivityTest() {
-    const statusEl = document.getElementById('connectStatus');
-    const gridEl = document.getElementById('connectGrid');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    gridEl.innerHTML = '';
+// ============================================================
+// Browser Fingerprint
+// ============================================================
 
-    // Build UI
-    SERVICES.forEach(s => {
-        gridEl.innerHTML += `
-            <div class="connect-item" id="conn-${s.name.replace(/[^a-zA-Z]/g, '')}">
-                <div class="connect-dot"></div>
-                <div class="connect-info">
-                    <div class="connect-name">${s.name}</div>
-                    <div class="connect-url">${new URL(s.url).hostname}</div>
-                </div>
-                <span class="connect-badge">Testing...</span>
-            </div>
-        `;
-    });
-
-    // Test all in parallel
-    const results = await Promise.allSettled(
-        SERVICES.map(async s => {
-            const r = await testConnectivity(s.url);
-            return { ...s, ...r };
-        })
-    );
-
-    let successCount = 0;
-    let failCount = 0;
-
-    results.forEach((result, i) => {
-        const s = SERVICES[i];
-        const id = `conn-${s.name.replace(/[^a-zA-Z]/g, '')}`;
-        const el = document.getElementById(id);
-        if (!el) return;
-
-        const dot = el.querySelector('.connect-dot');
-        const badge = el.querySelector('.connect-badge');
-
-        if (result.status === 'fulfilled' && result.value.ok) {
-            el.classList.add('success');
-            dot.classList.add('success');
-            badge.textContent = `${result.value.time} ms`;
-            badge.classList.add('success');
-            successCount++;
-        } else {
-            el.classList.add('fail');
-            dot.classList.add('fail');
-            badge.textContent = 'Blocked';
-            badge.classList.add('fail');
-            failCount++;
-        }
-    });
-
-    statusEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
-    return { successCount, failCount, total: SERVICES.length };
+function checkFingerprint() {
+    const fp = {};
+    fp['User Agent'] = navigator.userAgent;
+    fp['Platform'] = navigator.platform || '--';
+    fp['Language'] = navigator.language || '--';
+    fp['Languages'] = navigator.languages?.join(', ') || '--';
+    fp['Screen'] = `${screen.width}x${screen.height} @ ${window.devicePixelRatio}x`;
+    fp['Color Depth'] = `${screen.colorDepth}-bit`;
+    fp['Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone || '--';
+    fp['Touch Support'] = navigator.maxTouchPoints > 0 ? `Yes (${navigator.maxTouchPoints} points)` : 'No';
+    fp['Cookies'] = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
+    fp['Do Not Track'] = navigator.doNotTrack || 'Not set';
+    fp['Hardware Concurrency'] = `${navigator.hardwareConcurrency || '?'} cores`;
+    fp['Device Memory'] = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'N/A';
+    fp['WebGL Vendor'] = getWebGLInfo().vendor;
+    fp['WebGL Renderer'] = getWebGLInfo().renderer;
+    fp['Canvas Hash'] = getCanvasHash();
+    fp['Audio Context'] = getAudioFingerprint();
+    return fp;
 }
 
-// ============================================================
-// DNS Resolution Test
-// ============================================================
-
-async function testDNS(domain, timeout = 5000) {
-    const start = performance.now();
+function getWebGLInfo() {
     try {
-        const r = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
-            signal: AbortSignal.timeout(timeout),
-        });
-        const data = await r.json();
-        const time = Math.round(performance.now() - start);
-        const ips = data.Answer?.map(a => a.data).join(', ') || 'No record';
-        return { ok: true, ips, time };
-    } catch {
-        return { ok: false, ips: 'Resolution failed', time: -1 };
-    }
+        const c = document.createElement('canvas');
+        const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+        if (!gl) return { vendor: 'N/A', renderer: 'N/A' };
+        const ext = gl.getExtension('WEBGL_debug_renderer_info');
+        return {
+            vendor: ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR),
+            renderer: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+        };
+    } catch { return { vendor: 'N/A', renderer: 'N/A' }; }
 }
 
-async function runDNSTest() {
-    const statusEl = document.getElementById('dnsStatus');
-    const listEl = document.getElementById('dnsList');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    listEl.innerHTML = '';
+function getCanvasHash() {
+    try {
+        const c = document.createElement('canvas');
+        c.width = 200; c.height = 50;
+        const ctx = c.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(0, 0, 200, 50);
+        ctx.fillStyle = '#069';
+        ctx.fillText('NetCheck fingerprint', 2, 15);
+        const data = c.toDataURL();
+        let hash = 0;
+        for (let i = 0; i < data.length; i++) hash = ((hash << 5) - hash) + data.charCodeAt(i);
+        return '0x' + Math.abs(hash).toString(16).slice(0, 8);
+    } catch { return 'N/A'; }
+}
 
-    // Build UI
-    DNS_TARGETS.forEach(d => {
-        listEl.innerHTML += `
-            <div class="dns-item" id="dns-${d.replace(/\./g, '-')}">
-                <div class="dns-domain">${d}</div>
-                <div class="dns-result text-muted">Resolving...</div>
-                <div class="dns-time text-muted">...</div>
-            </div>
-        `;
-    });
-
-    // Test all
-    const results = await Promise.allSettled(
-        DNS_TARGETS.map(async d => {
-            const r = await testDNS(d);
-            return { domain: d, ...r };
-        })
-    );
-
-    results.forEach((result, i) => {
-        const d = DNS_TARGETS[i];
-        const id = `dns-${d.replace(/\./g, '-')}`;
-        const el = document.getElementById(id);
-        if (!el) return;
-
-        const resultEl = el.querySelector('.dns-result');
-        const timeEl = el.querySelector('.dns-time');
-
-        if (result.status === 'fulfilled' && result.value.ok) {
-            resultEl.textContent = result.value.ips;
-            resultEl.style.color = 'var(--text)';
-            timeEl.textContent = `${result.value.time} ms`;
-            timeEl.style.color = result.value.time < 200 ? 'var(--green)' : 'var(--yellow)';
-        } else {
-            resultEl.textContent = 'Resolution failed';
-            resultEl.style.color = 'var(--red)';
-            timeEl.textContent = '--';
-            timeEl.style.color = 'var(--red)';
-        }
-    });
-
-    statusEl.innerHTML = '<i class="fas fa-check-circle text-green"></i>';
+function getAudioFingerprint() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const analyser = ctx.createAnalyser();
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        osc.connect(analyser);
+        analyser.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(0);
+        const data = new Float32Array(analyser.frequencyBinCount);
+        analyser.getFloatFrequencyData(data);
+        osc.stop();
+        ctx.close();
+        let sum = 0;
+        for (let i = 0; i < data.length; i++) sum += Math.abs(data[i]);
+        return '0x' + Math.abs(Math.round(sum)).toString(16).slice(0, 6);
+    } catch { return 'N/A'; }
 }
 
 // ============================================================
-// Summary
+// UI Helpers
 // ============================================================
 
-function generateSummary(ipData, envData, connectResult) {
-    const el = document.getElementById('summaryContent');
+function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+function setBadge(id, state, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'badge' + (state === 'done' ? ' done' : state === 'fail' ? ' fail' : '');
+    el.textContent = text || (state === 'running' ? 'Running...' : 'Pending');
+}
+
+// ============================================================
+// Run All
+// ============================================================
+
+async function runAllChecks() {
+    const btn = document.querySelector('.btn-run');
+    btn.classList.add('running'); btn.disabled = true;
+    document.getElementById('summaryBox').innerHTML = '<p class="text-muted">Running diagnostics...</p>';
+
+    await checkIP();
+    checkEnv();
+    const latResult = await runLatency();
+    const dnsResults = await runDNS();
+    const webrtc = await checkWebRTC();
+    const dnsLeak = await checkDNSLeak();
+    const fp = checkFingerprint();
+
+    // Render leak section
+    renderLeak(webrtc, dnsLeak, fp);
+    setBadge('leakBadge', 'done', 'Done');
+
+    // Summary
+    generateSummary(latResult, dnsResults, webrtc, dnsLeak);
+
+    btn.classList.remove('running'); btn.disabled = false;
+}
+
+function renderLeak(webrtc, dnsLeak, fp) {
+    const grid = document.getElementById('leakGrid');
+    grid.innerHTML = `
+        <div class="leak-item">
+            <i class="fas fa-video" style="color:${webrtc.safe ? 'var(--green)' : 'var(--red)'}"></i>
+            <h4>WebRTC Leak</h4>
+            <div class="result ${webrtc.safe ? 'safe' : 'danger'}">${webrtc.safe ? 'No Leak' : 'Leaked'}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:6px">${webrtc.detail}</p>
+        </div>
+        <div class="leak-item">
+            <i class="fas fa-shield-alt" style="color:${dnsLeak.safe ? 'var(--green)' : 'var(--yellow)'}"></i>
+            <h4>DNS Leak</h4>
+            <div class="result ${dnsLeak.safe ? 'safe' : 'warn'}">${dnsLeak.safe ? 'Safe' : 'Check'}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:6px">${dnsLeak.detail}</p>
+        </div>
+        <div class="leak-item">
+            <i class="fas fa-fingerprint" style="color:var(--purple)"></i>
+            <h4>Fingerprint</h4>
+            <div class="result pending">${fp['Canvas Hash']}</div>
+            <p class="text-muted" style="font-size:12px;margin-top:6px">${fp['WebGL Renderer']}</p>
+        </div>`;
+
+    const fpTable = document.getElementById('fpTable');
+    fpTable.innerHTML = Object.entries(fp).map(([k, v]) =>
+        `<div class="fp-row"><div class="fp-label">${k}</div><div class="fp-value">${v}</div></div>`
+    ).join('');
+}
+
+function generateSummary(latResult, dnsResults, webrtc, dnsLeak) {
+    const el = document.getElementById('summaryBox');
     const rows = [];
 
-    // IP
-    const ip = document.getElementById('ipAddress').textContent;
-    const location = document.getElementById('ipLocation').textContent;
-    const isp = document.getElementById('ipISP').textContent;
-    rows.push(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> (${location}) - ${isp}</div>`);
+    const ip = document.getElementById('dIP').textContent;
+    const loc = document.getElementById('dLoc').textContent;
+    rows.push(`<div class="summary-row"><i class="fas fa-globe text-green"></i> IP: <strong>${ip}</strong> — ${loc}</div>`);
 
-    // Connectivity
-    if (connectResult) {
-        const pct = Math.round((connectResult.successCount / connectResult.total) * 100);
-        const color = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
-        rows.push(`<div class="summary-row"><i class="fas fa-server ${color}"></i> Connectivity: <strong>${connectResult.successCount}/${connectResult.total}</strong> services reachable (${pct}%)</div>`);
+    if (latResult) {
+        const pct = Math.round((latResult.ok / latResult.total) * 100);
+        const c = pct >= 70 ? 'text-green' : pct >= 40 ? 'text-yellow' : 'text-red';
+        rows.push(`<div class="summary-row"><i class="fas fa-server ${c}"></i> Connectivity: <strong>${latResult.ok}/${latResult.total}</strong> services reachable (${pct}%)</div>`);
     }
 
-    // Google
-    const googleItem = document.querySelector('#conn-googlecom');
-    if (googleItem) {
-        const ok = googleItem.classList.contains('success');
-        rows.push(`<div class="summary-row"><i class="fab fa-google ${ok ? 'text-green' : 'text-red'}"></i> Google: ${ok ? 'Accessible' : 'Blocked'}</div>`);
+    if (dnsResults) {
+        const dnsOk = dnsResults.filter(r => r.ok).length;
+        rows.push(`<div class="summary-row"><i class="fas fa-search text-green"></i> DNS: <strong>${dnsOk}/${dnsResults.length}</strong> domains resolved</div>`);
     }
 
-    // ChatGPT
-    const chatgptItem = document.querySelector('#conn-chatgptcom');
-    if (chatgptItem) {
-        const ok = chatgptItem.classList.contains('success');
-        rows.push(`<div class="summary-row"><i class="fas fa-robot ${ok ? 'text-green' : 'text-red'}"></i> ChatGPT: ${ok ? 'Accessible' : 'Blocked'}</div>`);
-    }
+    rows.push(`<div class="summary-row"><i class="fas fa-video ${webrtc.safe ? 'text-green' : 'text-red'}"></i> WebRTC: ${webrtc.safe ? 'No leak detected' : 'IP may be leaked'}</div>`);
+    rows.push(`<div class="summary-row"><i class="fas fa-shield-alt ${dnsLeak.safe ? 'text-green' : 'text-yellow'}"></i> DNS: ${dnsLeak.safe ? 'No leak detected' : 'Potential leak'}</div>`);
 
-    // GitHub
-    const githubItem = document.querySelector('#conn-github');
-    if (githubItem) {
-        const ok = githubItem.classList.contains('success');
-        rows.push(`<div class="summary-row"><i class="fab fa-github ${ok ? 'text-green' : 'text-red'}"></i> GitHub: ${ok ? 'Accessible' : 'Blocked'}</div>`);
-    }
-
-    // Domestic services
-    const domesticServices = ['Baidu', 'Bilibili', 'Zhihu', 'Weibo'];
-    let domesticOk = 0;
-    domesticServices.forEach(name => {
-        const el = document.getElementById(`conn-${name.replace(/[^a-zA-Z]/g, '')}`);
-        if (el && el.classList.contains('success')) domesticOk++;
-    });
-    rows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> Domestic services: <strong>${domesticOk}/${domesticServices.length}</strong> reachable</div>`);
-
-    // Network type
-    const connType = document.getElementById('connEffective').textContent;
-    if (connType && connType !== 'N/A') {
-        rows.push(`<div class="summary-row"><i class="fas fa-wifi text-green"></i> Network: ${connType}</div>`);
-    }
+    // Domestic vs International
+    const domestic = ['Baidu', 'Bilibili', 'Zhihu', 'Weibo', 'Douyin', 'Tencent'];
+    const intl = ['Google', 'ChatGPT', 'OpenAI API', 'Claude', 'YouTube', 'Twitter/X'];
+    let domOk = 0, intOk = 0;
+    domestic.forEach(n => { const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`); if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) domOk++; });
+    intl.forEach(n => { const el = document.getElementById(`lat-${n.replace(/[^a-zA-Z]/g, '')}`); if (el?.querySelector('.lat-value.fast') || el?.querySelector('.lat-value.medium')) intOk++; });
+    rows.push(`<div class="summary-row"><i class="fas fa-flag text-green"></i> Domestic: <strong>${domOk}/${domestic.length}</strong> | International: <strong>${intOk}/${intl.length}</strong></div>`);
 
     el.innerHTML = rows.join('');
 }
 
 // ============================================================
-// Run All Checks
+// Feature card click
 // ============================================================
-
-async function runAllChecks() {
-    const btn = document.querySelector('.btn-refresh');
-    btn.classList.add('running');
-    btn.disabled = true;
-
-    // Reset summary
-    document.getElementById('summaryContent').innerHTML = '<p class="text-muted">Running diagnostics...</p>';
-
-    // Run sequentially
-    await checkIP();
-    checkNetworkEnv();
-    await runLatencyTest();
-    const connectResult = await runConnectivityTest();
-    await runDNSTest();
-    generateSummary(null, null, connectResult);
-
-    btn.classList.remove('running');
-    btn.disabled = false;
-}
-
-// Auto-run on load
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(runAllChecks, 500);
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('click', e => {
+            const action = card.dataset.action;
+            if (action) { e.preventDefault(); window[action](); }
+        });
+    });
+    // Smooth scroll for nav
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
 });

@@ -8,151 +8,131 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="scanline"></div>
-
     <header>
-        <div class="container">
+        <div class="container header-inner">
             <div class="logo">
                 <i class="fas fa-network-wired"></i>
                 <span>NetCheck</span>
-                <small>Network Diagnostics Tool</small>
             </div>
-            <button class="btn-refresh" onclick="runAllChecks()">
-                <i class="fas fa-sync-alt"></i> Run Check
+            <nav>
+                <a href="#home" class="nav-link active" data-section="home">Home</a>
+                <a href="#ip" class="nav-link" data-section="ip">IP Info</a>
+                <a href="#latency" class="nav-link" data-section="latency">Latency</a>
+                <a href="#leak" class="nav-link" data-section="leak">Leak Test</a>
+            </nav>
+            <button class="btn-run" onclick="runAllChecks()">
+                <i class="fas fa-play"></i> Run Check
             </button>
         </div>
     </header>
 
-    <main class="container">
-        <!-- IP Info -->
-        <section class="card" id="ipCard">
-            <div class="card-header">
-                <i class="fas fa-globe"></i>
-                <h2>IP Information</h2>
-                <span class="status" id="ipStatus"><i class="fas fa-spinner fa-spin"></i></span>
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Network Diagnostics Tool</h1>
+            <p>One-click check your IP, network environment, latency, DNS, WebRTC and VPN leak detection.</p>
+            <div class="hero-ip">
+                <span class="hero-ip-label">Your IP</span>
+                <span class="hero-ip-value" id="heroIP">Detecting...</span>
+                <span class="hero-ip-loc" id="heroLoc"></span>
             </div>
-            <div class="card-body">
-                <div class="ip-grid">
-                    <div class="ip-item">
-                        <label>IP Address</label>
-                        <span id="ipAddress" class="mono">--</span>
-                    </div>
-                    <div class="ip-item">
-                        <label>Location</label>
-                        <span id="ipLocation">--</span>
-                    </div>
-                    <div class="ip-item">
-                        <label>ISP</label>
-                        <span id="ipISP">--</span>
-                    </div>
-                    <div class="ip-item">
-                        <label>ASN</label>
-                        <span id="ipASN" class="mono">--</span>
-                    </div>
-                    <div class="ip-item">
-                        <label>Country</label>
-                        <span id="ipCountry">--</span>
-                    </div>
-                    <div class="ip-item">
-                        <label>Timezone</label>
-                        <span id="ipTimezone" class="mono">--</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Network Environment -->
-        <section class="card" id="envCard">
-            <div class="card-header">
-                <i class="fas fa-shield-alt"></i>
-                <h2>Network Environment</h2>
-                <span class="status" id="envStatus"><i class="fas fa-spinner fa-spin"></i></span>
-            </div>
-            <div class="card-body">
-                <div class="env-grid">
-                    <div class="env-item">
-                        <label>Connection Type</label>
-                        <span id="connType">--</span>
-                    </div>
-                    <div class="env-item">
-                        <label>Effective Type</label>
-                        <span id="connEffective">--</span>
-                    </div>
-                    <div class="env-item">
-                        <label>Downlink</label>
-                        <span id="connDownlink">--</span>
-                    </div>
-                    <div class="env-item">
-                        <label>RTT</label>
-                        <span id="connRTT">--</span>
-                    </div>
-                    <div class="env-item">
-                        <label>Data Saver</label>
-                        <span id="connDataSaver">--</span>
-                    </div>
-                    <div class="env-item">
-                        <label>Online Status</label>
-                        <span id="connOnline">--</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Feature Cards -->
+    <section class="features container" id="features">
+        <a class="feature-card" href="#ip" data-action="checkIP">
+            <div class="feature-icon"><i class="fas fa-globe"></i></div>
+            <h3>IP Info</h3>
+            <p>IP address, location, ISP, ASN, timezone</p>
+        </a>
+        <a class="feature-card" href="#ip" data-action="checkEnv">
+            <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+            <h3>Network Env</h3>
+            <p>Connection type, downlink, RTT, data saver</p>
+        </a>
+        <a class="feature-card" href="#latency" data-action="runLatency">
+            <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+            <h3>Latency Test</h3>
+            <p>Ping 16 services: Google, ChatGPT, GitHub, etc.</p>
+        </a>
+        <a class="feature-card" href="#latency" data-action="runConnectivity">
+            <div class="feature-icon"><i class="fas fa-server"></i></div>
+            <h3>Connectivity</h3>
+            <p>Check accessibility of global services</p>
+        </a>
+        <a class="feature-card" href="#latency" data-action="runDNS">
+            <div class="feature-icon"><i class="fas fa-search"></i></div>
+            <h3>DNS Resolution</h3>
+            <p>Resolve domains via Google DNS, measure speed</p>
+        </a>
+        <a class="feature-card" href="#leak" data-action="checkWebRTC">
+            <div class="feature-icon"><i class="fas fa-video"></i></div>
+            <h3>WebRTC Leak</h3>
+            <p>Detect real IP leaking via WebRTC protocol</p>
+        </a>
+        <a class="feature-card" href="#leak" data-action="checkDNSLeak">
+            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>DNS Leak</h3>
+            <p>Check if DNS queries are exposed outside VPN</p>
+        </a>
+        <a class="feature-card" href="#leak" data-action="checkFingerprint">
+            <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
+            <h3>Fingerprint</h3>
+            <p>Browser & device fingerprint analysis</p>
+        </a>
+    </section>
 
-        <!-- Latency Test -->
-        <section class="card" id="latencyCard">
-            <div class="card-header">
-                <i class="fas fa-tachometer-alt"></i>
-                <h2>Latency Test</h2>
-                <span class="status" id="latencyStatus"><i class="fas fa-spinner fa-spin"></i></span>
-            </div>
-            <div class="card-body">
-                <div class="latency-list" id="latencyList">
-                    <!-- Generated by JS -->
-                </div>
-            </div>
-        </section>
+    <!-- IP Detail Section -->
+    <section class="section container" id="ip">
+        <div class="section-header">
+            <h2><i class="fas fa-globe"></i> IP & Network Info</h2>
+            <span class="badge" id="ipBadge">Pending</span>
+        </div>
+        <div class="detail-grid" id="ipGrid">
+            <div class="detail-item"><label>IP Address</label><span id="dIP" class="mono">--</span></div>
+            <div class="detail-item"><label>Location</label><span id="dLoc">--</span></div>
+            <div class="detail-item"><label>ISP</label><span id="dISP">--</span></div>
+            <div class="detail-item"><label>ASN</label><span id="dASN" class="mono">--</span></div>
+            <div class="detail-item"><label>Country</label><span id="dCountry">--</span></div>
+            <div class="detail-item"><label>Timezone</label><span id="dTZ" class="mono">--</span></div>
+            <div class="detail-item"><label>Connection</label><span id="dConn">--</span></div>
+            <div class="detail-item"><label>Downlink</label><span id="dDown">--</span></div>
+            <div class="detail-item"><label>RTT</label><span id="dRTT">--</span></div>
+            <div class="detail-item"><label>IPv6</label><span id="dIPv6" class="mono">--</span></div>
+            <div class="detail-item"><label>Data Saver</label><span id="dSaver">--</span></div>
+            <div class="detail-item"><label>Online</label><span id="dOnline">--</span></div>
+        </div>
+    </section>
 
-        <!-- Connectivity Test -->
-        <section class="card" id="connectCard">
-            <div class="card-header">
-                <i class="fas fa-server"></i>
-                <h2>Service Connectivity</h2>
-                <span class="status" id="connectStatus"><i class="fas fa-spinner fa-spin"></i></span>
-            </div>
-            <div class="card-body">
-                <div class="connect-grid" id="connectGrid">
-                    <!-- Generated by JS -->
-                </div>
-            </div>
-        </section>
+    <!-- Latency Section -->
+    <section class="section container" id="latency">
+        <div class="section-header">
+            <h2><i class="fas fa-tachometer-alt"></i> Latency & Connectivity</h2>
+            <span class="badge" id="latBadge">Pending</span>
+        </div>
+        <div class="latency-table" id="latencyTable"></div>
+    </section>
 
-        <!-- DNS Test -->
-        <section class="card" id="dnsCard">
-            <div class="card-header">
-                <i class="fas fa-search"></i>
-                <h2>DNS Resolution</h2>
-                <span class="status" id="dnsStatus"><i class="fas fa-spinner fa-spin"></i></span>
-            </div>
-            <div class="card-body">
-                <div class="dns-list" id="dnsList">
-                    <!-- Generated by JS -->
-                </div>
-            </div>
-        </section>
+    <!-- Leak Test Section -->
+    <section class="section container" id="leak">
+        <div class="section-header">
+            <h2><i class="fas fa-shield-alt"></i> Leak & Security Tests</h2>
+            <span class="badge" id="leakBadge">Pending</span>
+        </div>
+        <div class="leak-grid" id="leakGrid"></div>
+        <div class="fingerprint-table" id="fpTable"></div>
+    </section>
 
-        <!-- Summary -->
-        <section class="card summary-card" id="summaryCard">
-            <div class="card-header">
-                <i class="fas fa-clipboard-check"></i>
-                <h2>Summary</h2>
-            </div>
-            <div class="card-body">
-                <div class="summary-content" id="summaryContent">
-                    <p class="text-muted">Click "Run Check" to start diagnostics...</p>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- Summary -->
+    <section class="section container" id="summary">
+        <div class="section-header">
+            <h2><i class="fas fa-clipboard-check"></i> Summary</h2>
+        </div>
+        <div class="summary-box" id="summaryBox">
+            <p class="text-muted">Click "Run Check" to start...</p>
+        </div>
+    </section>
 
     <footer>
         <div class="container">
