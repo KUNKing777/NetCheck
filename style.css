@@ -113,6 +113,26 @@ nav {
     background: var(--bg-hover);
 }
 
+.btn-lang {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.btn-lang:hover {
+    color: var(--text);
+    border-color: var(--text);
+}
+
 .btn-run {
     background: var(--text);
     color: #fff;

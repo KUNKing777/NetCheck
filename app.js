@@ -28,6 +28,89 @@ const DNS_TARGETS = [
     'deepseek.com', 'wikipedia.org',
 ];
 
+// ============================================================
+// i18n - Language Support
+// ============================================================
+
+let currentLang = localStorage.getItem('netcheck_lang') || 'zh';
+
+const i18n = {
+    zh: {
+        nav_ip: 'IP 信息', nav_latency: '延迟测试', nav_dns: 'DNS 解析', nav_security: '安全检测',
+        hero_badge: '一站式网络诊断工具', hero_title: '检查你的网络环境',
+        hero_desc: '一键检测 IP 地址、网络延迟、DNS 解析、WebRTC 泄露、浏览器指纹等全方位网络信息',
+        hero_ip_label: 'Your IP Address',
+        feat_ip: 'IP 信息', feat_ip_desc: 'IP 地址、地理位置、ISP、ASN、时区',
+        feat_env: '网络环境', feat_env_desc: '连接类型、下行速度、RTT、省流模式',
+        feat_latency: '延迟测试', feat_latency_desc: 'Ping 16 个服务：Google、ChatGPT、GitHub 等',
+        feat_conn: '连通性', feat_conn_desc: '检测全球服务的可访问性',
+        feat_dns: 'DNS 解析', feat_dns_desc: '通过 Google DNS 解析域名，测量速度',
+        feat_webrtc: 'WebRTC 泄露', feat_webrtc_desc: '检测 WebRTC 协议导致的真实 IP 泄露',
+        feat_dnsleak: 'DNS 泄露', feat_dnsleak_desc: '检查 DNS 查询是否在 VPN 外暴露',
+        feat_fp: '浏览器指纹', feat_fp_desc: '浏览器与设备指纹分析',
+        btn_run: '开始检测',
+        sec_ip: 'IP & 网络信息', sec_latency: '延迟 & 连通性', sec_dns: 'DNS 解析',
+        sec_leak: '安全 & 泄露检测', sec_summary: '检测摘要',
+        label_ip: 'IP 地址', label_loc: '位置', label_isp: 'ISP', label_asn: 'ASN',
+        label_country: '国家', label_tz: '时区', label_conn: '连接类型',
+        label_down: '下行速度', label_rtt: 'RTT', label_ipv6: 'IPv6',
+        label_saver: '省流模式', label_online: '在线状态',
+        badge_pending: '等待中', badge_running: '检测中...', badge_done: '完成', badge_error: '错误',
+        empty_hint: '点击"开始检测"或上方卡片开始测试',
+        leak_webrtc: 'WebRTC 泄露', leak_dns: 'DNS 泄露', leak_fp: '浏览器指纹',
+        leak_waiting: '等待检测', leak_safe: '安全', leak_warn: '注意', leak_danger: '泄露',
+        summary_empty: '点击"开始检测"运行全面网络诊断',
+        footer: 'NetCheck — 纯静态网络诊断工具 · 数据不会上传至任何服务器',
+    },
+    en: {
+        nav_ip: 'IP Info', nav_latency: 'Latency', nav_dns: 'DNS', nav_security: 'Security',
+        hero_badge: 'All-in-one Network Diagnostics', hero_title: 'Check Your Network',
+        hero_desc: 'One-click check IP, latency, DNS, WebRTC leak, browser fingerprint and more',
+        hero_ip_label: 'Your IP Address',
+        feat_ip: 'IP Info', feat_ip_desc: 'IP address, location, ISP, ASN, timezone',
+        feat_env: 'Network Env', feat_env_desc: 'Connection type, downlink, RTT, data saver',
+        feat_latency: 'Latency Test', feat_latency_desc: 'Ping 16 services: Google, ChatGPT, GitHub, etc.',
+        feat_conn: 'Connectivity', feat_conn_desc: 'Check accessibility of global services',
+        feat_dns: 'DNS Resolution', feat_dns_desc: 'Resolve domains via Google DNS, measure speed',
+        feat_webrtc: 'WebRTC Leak', feat_webrtc_desc: 'Detect real IP leaking via WebRTC protocol',
+        feat_dnsleak: 'DNS Leak', feat_dnsleak_desc: 'Check if DNS queries are exposed outside VPN',
+        feat_fp: 'Fingerprint', feat_fp_desc: 'Browser & device fingerprint analysis',
+        btn_run: 'Run Check',
+        sec_ip: 'IP & Network Info', sec_latency: 'Latency & Connectivity', sec_dns: 'DNS Resolution',
+        sec_leak: 'Security & Leak Tests', sec_summary: 'Summary',
+        label_ip: 'IP Address', label_loc: 'Location', label_isp: 'ISP', label_asn: 'ASN',
+        label_country: 'Country', label_tz: 'Timezone', label_conn: 'Connection',
+        label_down: 'Downlink', label_rtt: 'RTT', label_ipv6: 'IPv6',
+        label_saver: 'Data Saver', label_online: 'Online Status',
+        badge_pending: 'Pending', badge_running: 'Running...', badge_done: 'Done', badge_error: 'Error',
+        empty_hint: 'Click "Run Check" or cards above to start',
+        leak_webrtc: 'WebRTC Leak', leak_dns: 'DNS Leak', leak_fp: 'Fingerprint',
+        leak_waiting: 'Waiting', leak_safe: 'Safe', leak_warn: 'Warning', leak_danger: 'Leaked',
+        summary_empty: 'Click "Run Check" to start diagnostics',
+        footer: 'NetCheck — Pure static network diagnostics tool · No data uploaded to any server',
+    }
+};
+
+function t(key) {
+    return i18n[currentLang][key] || i18n['zh'][key] || key;
+}
+
+function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const text = t(key);
+        if (text) el.textContent = text;
+    });
+    document.getElementById('btnLang').textContent = currentLang === 'zh' ? 'EN' : '中';
+    document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+}
+
+function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    localStorage.setItem('netcheck_lang', currentLang);
+    applyLang();
+}
+
 // Progress tracking
 let totalSteps = 0;
 let currentStep = 0;
@@ -420,7 +503,11 @@ function setBadge(id, state, text) {
     const el = document.getElementById(id);
     if (!el) return;
     el.className = 'badge' + (state === 'done' ? ' done' : state === 'fail' ? ' fail' : state === 'running' ? ' running' : '');
-    el.textContent = text || (state === 'running' ? '检测中...' : '等待中');
+    if (text) {
+        el.textContent = text;
+    } else {
+        el.textContent = state === 'running' ? t('badge_running') : state === 'done' ? t('badge_done') : state === 'fail' ? t('badge_error') : t('badge_pending');
+    }
 }
 
 // ============================================================
@@ -577,4 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-detect IP on load
     checkIP();
     checkEnv();
+
+    // Apply language
+    applyLang();
 });
