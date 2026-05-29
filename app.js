@@ -30,9 +30,9 @@ const DNS_TARGETS = [
 
 // DoH resolvers ordered by best availability in China
 const DNS_RESOLVERS = [
-    'https://doh.pub/resolve',        // DNSPod (Tencent)
-    'https://dns.alidns.com/resolve', // Alibaba DNS
-    'https://dns.google/resolve',     // Google (international fallback)
+    { name: 'DNSPod',   url: 'https://doh.pub/dns-query' },
+    { name: 'AliDNS',   url: 'https://dns.alidns.com/dns-query' },
+    { name: 'Google',   url: 'https://dns.google/resolve' },
 ];
 
 // ============================================================
@@ -367,8 +367,8 @@ function renderGeoSources() {
 function showWebRTCLeakIP() {
     const el = document.getElementById('dWebRTCIP');
     if (!el || !lastWebrtc) return;
-    if (!lastWebrtc.safe && lastWebrtc.ips.length) {
-        el.textContent = lastWebrtc.ips.join(', ');
+    if (!lastWebrtc.safe && lastWebrtc.leakedIPs?.length) {
+        el.textContent = lastWebrtc.leakedIPs.join(', ');
         el.style.color = 'var(--red)';
     } else {
         el.textContent = t('leak_no_leak');
@@ -537,7 +537,12 @@ async function runDNS() {
         let ok = false, ips = '', ms = 0;
         for (const resolver of DNS_RESOLVERS) {
             try {
-                const r = await fetch(`${resolver}?name=${d}&type=A`, { signal: AbortSignal.timeout(4000) });
+                const isDoH = resolver.url.includes('/dns-query');
+                const opts = {
+                    signal: AbortSignal.timeout(4000),
+                    headers: isDoH ? { 'Accept': 'application/dns-json' } : {}
+                };
+                const r = await fetch(`${resolver.url}?name=${d}&type=A`, opts);
                 if (!r.ok) continue;
                 const data = await r.json();
                 ms = Math.round(performance.now() - start);
@@ -575,7 +580,7 @@ async function runDNS() {
 
 async function checkWebRTC() {
     return new Promise(resolve => {
-        const ips = new Set();
+        const rawIPs = new Set();
         try {
             const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
             pc.createDataChannel('');
@@ -583,22 +588,46 @@ async function checkWebRTC() {
             pc.onicecandidate = e => {
                 if (!e.candidate) {
                     pc.close();
-                    const list = [...ips];
-                    const hasPrivate = list.some(ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.)/.test(ip));
-                    const hasV6 = list.some(ip => ip.includes(':'));
+                    // Filter valid IPs, exclude 0.0.0.0 and localhost
+                    const valid = [...rawIPs].filter(ip =>
+                        ip !== '0.0.0.0' && ip !== '127.0.0.1' && !ip.startsWith('127.')
+                    );
+                    // Separate private vs public
+                    const isPrivate = ip => /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.)/.test(ip);
+                    const privateIPs = valid.filter(isPrivate);
+                    const publicIPs = valid.filter(ip => !isPrivate(ip) && !ip.includes(':'));
+
+                    // Get HTTP-detected IP for comparison
+                    const httpIP = document.getElementById('dIP')?.textContent || '';
+
+                    // Leak = WebRTC exposes a public IP different from HTTP IP
+                    const leaked = publicIPs.some(ip => httpIP && ip !== httpIP);
+                    const hasPrivate = privateIPs.length > 0;
+
+                    let detail;
+                    if (leaked) {
+                        detail = `${t('leak_danger')}: ${publicIPs.filter(ip => ip !== httpIP).join(', ')}`;
+                    } else if (publicIPs.length) {
+                        detail = `${t('leak_safe')} (${publicIPs.join(', ')})`;
+                    } else if (privateIPs.length) {
+                        detail = `${t('leak_safe_result')} (${t('label_loc')}: ${privateIPs.join(', ')})`;
+                    } else {
+                        detail = t('webrtc_no_local');
+                    }
                     resolve({
-                        ips: list, hasPrivate, hasV6,
-                        safe: list.length <= 1,
-                        detail: list.length ? list.join(', ') : t('webrtc_no_local')
+                        ips: valid, publicIPs, privateIPs, hasPrivate,
+                        safe: !leaked,
+                        leakedIPs: leaked ? publicIPs.filter(ip => ip !== httpIP) : [],
+                        detail
                     });
                     return;
                 }
                 const match = e.candidate.candidate.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([a-f0-9:]+)/gi);
-                if (match) match.forEach(ip => ips.add(ip));
+                if (match) match.forEach(ip => rawIPs.add(ip));
             };
-            setTimeout(() => { pc.close(); resolve({ ips: [...ips], safe: true, detail: t('webrtc_timeout') }); }, 5000);
+            setTimeout(() => { pc.close(); resolve({ ips: [], publicIPs: [], privateIPs: [], hasPrivate: false, safe: true, leakedIPs: [], detail: t('webrtc_timeout') }); }, 5000);
         } catch {
-            resolve({ ips: [], safe: true, detail: t('webrtc_unsupported') });
+            resolve({ ips: [], publicIPs: [], privateIPs: [], hasPrivate: false, safe: true, leakedIPs: [], detail: t('webrtc_unsupported') });
         }
     });
 }
